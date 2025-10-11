@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Video Platform</title>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">Video<span>Vault</span></a>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search videos from YouTube, TikTok, Vimeo...">
+            </div>
+            <div class="card" role="region" aria-label="Agregar video">
+            <button class="profile-btn" aria-label="Profile">U</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="profile-header">
+            <h1>Profile Settings</h1>
+            <p>Manage your account settings and preferences</p>
+        </div>
+
+        <div id="successMessage" class="success-message">
+            Settings saved successfully!
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-section">
+                <h2 class="section-title">Profile Picture</h2>
+                <div class="profile-picture-section">
+                    <div class="profile-picture" id="profilePicture">U</div>
+                    <div class="profile-picture-actions">
+                        <button class="btn btn-primary" onclick="uploadPhoto()">Upload Photo</button>
+                        <button class="btn btn-secondary" onclick="removePhoto()">Remove Photo</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h2 class="section-title">Personal Information</h2>
+                <form id="personalInfoForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" value="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" value="Doe" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" value="johndoe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" value="john.doe@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" placeholder="Tell us about yourself...">Video enthusiast and content creator</textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="profile-section">
+                <h2 class="section-title">Account Security</h2>
+                <form id="securityForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" placeholder="Enter new password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="changePassword()">Change Password</button>
+                </form>
+            </div>
+
+            <div class="profile-section">
+                <h2 class="section-title">Preferences</h2>
+                <div class="form-group">
+                    <label for="language">Language</label>
+                    <select id="language">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="pt">Português</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timezone">Timezone</label>
+                    <select id="timezone">
+                        <option value="utc">UTC</option>
+                        <option value="est">Eastern Time (EST)</option>
+                        <option value="pst">Pacific Time (PST)</option>
+                        <option value="cet">Central European Time (CET)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="videoQuality">Default Video Quality</label>
+                    <select id="videoQuality">
+                        <option value="auto">Auto</option>
+                        <option value="1080p">1080p</option>
+                        <option value="720p">720p</option>
+                        <option value="480p">480p</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- <div class="profile-section">
+                <h2 class="section-title">Notifications</h2>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h3>Email Notifications</h3>
+                        <p>Receive updates and news via email</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h3>New Video Alerts</h3>
+                        <p>Get notified when new videos are added</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h3>Weekly Digest</h3>
+                        <p>Receive a weekly summary of trending videos</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div> -->
+
+            <div class="profile-section">
+                <h2 class="section-title">Privacy</h2>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h3>Public Profile</h3>
+                        <p>Make your profile visible to other users</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h3>Show Watch History</h3>
+                        <p>Display your watch history on your profile</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h3>Activity Status</h3>
+                        <p>Show when you're online</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h2 class="section-title" style="color: #ff3b30;">Danger Zone</h2>
+                <p style="color: #a0a0a0; margin-bottom: 1rem;">These actions are irreversible. Please be careful.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-danger" onclick="deactivateAccount()">Deactivate Account</button>
+                    <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+                </div>
+            </div>
+
+             Action Buttons 
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="cancelChanges()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="social-links">
+                <a href="#" class="social-link" title="Facebook">f</a>
+                <a href="#" class="social-link" title="Twitter">𝕏</a>
+                <a href="#" class="social-link" title="Instagram">📷</a>
+                <a href="#" class="social-link" title="YouTube">▶</a>
+                <a href="#" class="social-link" title="LinkedIn">in</a>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Help Center</a>
+            </div>
+        </div>
+        <script src="js/profile.js"></script>
+    </footer>
+
+</body>
+</html>

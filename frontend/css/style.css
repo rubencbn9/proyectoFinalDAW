@@ -80,8 +80,7 @@
         .search-bar::placeholder {
             color: var(--text-secondary);
         }
-        
-
+  
         .profile-btn {
             width: 40px;
             height: 40px;
