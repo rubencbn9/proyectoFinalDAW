@@ -13,17 +13,28 @@
         <div class="header-container">
             <a href="/index.html" class="logo">Video<span>Vault</span></a>
             <div class="search-container">
-                <input type="text" class="search-bar" placeholder="Search videos from YouTube, TikTok, Vimeo...">
+                <input type="text" class="search-bar" placeholder="Busca tus vídeos YouTube, TikTok, Vimeo...">
             </div>
             <div class="card" role="region" aria-label="Agregar video">
-            <button class="profile-btn" aria-label="Profile">U</button>
+            <a id="top-user" href="/profile.html">
+                
+                <button class="profile-btn" id="profile-inicial" aria-label="Profile">R</button>
+                   <button 
+    class="logout-btn" 
+    onclick="handleLogout()" 
+    aria-label="Cerrar sesión"
+>
+    logout
+</button>
+            </a>
+         
         </div>
     </header>
 
     <div class="main-container">
         <aside class="sidebar">
             <div class="filter-section">
-                <h3 class="filter-title">Platform</h3>
+                <h3 class="filter-title">Plataformas</h3>
                 <div class="filter-option">
                     <input type="checkbox" id="youtube">
                     <label for="youtube">YouTube</label>
@@ -43,10 +54,10 @@
             </div>
 
             <div class="filter-section">
-                <h3 class="filter-title">Category</h3>
+                <h3 class="filter-title">Categoría</h3>
                 <div class="filter-option">
                     <input type="checkbox" id="music">
-                    <label for="music">Music</label>
+                    <label for="music">Musica</label>
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="gaming">
@@ -54,64 +65,69 @@
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="education">
-                    <label for="education">Education</label>
+                    <label for="education">Educacion</label>
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="entertainment">
-                    <label for="entertainment">Entertainment</label>
+                    <label for="entertainment">Entretenimiento</label>
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="sports">
-                    <label for="sports">Sports</label>
+                    <label for="sports">Deportes</label>
                 </div>
             </div>
 
-            <div class="filter-section">
-                <h3 class="filter-title">Duration</h3>
+            <!-- <div class="filter-section">
+                <h3 class="filter-title">Duracion</h3>
                 <div class="filter-option">
                     <input type="checkbox" id="short">
-                    <label for="short">Short (< 5 min)</label>
+                    <label for="short">Corta (< 5 min)</label>
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="medium">
-                    <label for="medium">Medium (5-20 min)</label>
+                    <label for="medium">Media (5-20 min)</label>
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="long">
-                    <label for="long">Long (> 20 min)</label>
+                    <label for="long">Larga (> 20 min)</label>
                 </div>
-            </div>
+            </div> -->
 
             <div class="filter-section">
-                <h3 class="filter-title">Upload Date</h3>
+                <h3 class="filter-title">Data de subida</h3>
                 <div class="filter-option">
                     <input type="checkbox" id="today">
-                    <label for="today">Today</label>
+                    <label for="today">Hoy</label>
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="week">
-                    <label for="week">This Week</label>
+                    <label for="week">Esta semana</label>
                 </div>
                 <div class="filter-option">
                     <input type="checkbox" id="month">
-                    <label for="month">This Month</label>
+                    <label for="month">Este mes</label>
                 </div>
             </div>
         </aside>
 
         <main class="content">
             <div class="content-header">
-                <h1>Discover Videos</h1>
-                <p>Explore trending content from multiple platforms</p>
+                <h1>Explora tus Videos <span id="usuario"></span>
+                    <div class="separate">
+                        <a id="btnAdd" href="nuevoVideo.html">
+                            <button class="add-video">+ VIDEO</button>
+                        </a>
+                    </div>
+                </h1>
+                <p>Explora contenido de moda de multiples plataformas</p>
             </div>
 
             <div class="video-grid" id="videoGrid">
-                 Video cards will be generated by JavaScript 
+                 Videos generados por javascript 
             </div>
         </main>
     </div>
-
-     Footer 
+ 
     <footer>
         <div class="footer-container">
             <div class="social-links">
@@ -122,10 +138,10 @@
                 <a href="#" class="social-link" aria-label="LinkedIn">in</a>
             </div>
             <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Cookie Policy</a>
-                <a href="#">Contact Us</a>
+                 <a href="#">Política de privacidad</a>
+                <a href="#">Terminos y Servicios</a>
+                <a href="#">Contacto</a>
+                <a href="#">Sobre nosotros</a>
             </div>
         </div>
     </footer>

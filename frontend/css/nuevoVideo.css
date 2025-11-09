@@ -32,6 +32,9 @@
             top: 0;
             z-index: 100;
         }
+         #top-user{
+            text-decoration: none;
+        }
 
         .header-container {
             display: flex;

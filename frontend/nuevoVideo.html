@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Video - Video Platform</title>
+    <title>Add Video - VideoVault</title>
     <link rel="stylesheet" href="/css/nuevoVideo.css">
 </head>
 <body>
@@ -14,22 +14,24 @@
                 <input type="text" class="search-bar" placeholder="Search videos from YouTube, TikTok, Vimeo...">
             </div>
             <div class="card" role="region" aria-label="Agregar video">
-            <button class="profile-btn" aria-label="Profile">U</button>
+            <a id="top-user" href="/profile.html">
+                <button class="profile-btn" aria-label="Profile">R</button>
+            </a>
         </div>
     </header>
 
     <main>
         <div class="page-header">
-            <h1>Add New Video</h1>
-            <p>Share videos from YouTube, TikTok, and other platforms</p>
+            <h1>Nuevo video</h1>
+            <p>Comparte vídeos de YouTube, TikTok y otras de tus plataformas</p>
         </div>
 
         <div class="alert alert-success" id="successAlert">
-            Video added successfully!
+            Video añadido correctamente!
         </div>
 
         <div class="alert alert-error" id="errorAlert">
-            An error occurred. Please try again.
+            Error subiendo archivo, intentalo de nuevo!
         </div>
 
         <div class="form-container">
@@ -45,9 +47,9 @@
                         placeholder="https://www.youtube.com/watch?v=..." 
                         required
                     >
-                    <p class="form-help">Paste the URL from YouTube, TikTok, Vimeo, or other video platforms</p>
+                    <p class="form-help">Pega la URL del video que quieres añadir</p>
                     <div class="video-preview" id="videoPreview">
-                        <h3>Detected Platform</h3>
+                        <h3>Plataforma detectada</h3>
                         <div class="preview-info">
                             <span id="platformInfo"></span>
                         </div>
@@ -56,13 +58,13 @@
 
                 <div class="form-group">
                     <label for="videoTitle">
-                        Title<span class="required">*</span>
+                        Titulo<span class="required">*</span>
                     </label>
                     <input 
                         type="text" 
                         id="videoTitle" 
                         name="videoTitle" 
-                        placeholder="Enter video title" 
+                        placeholder="Introduce un titulo al video" 
                         required
                         maxlength="100"
                     >
@@ -70,56 +72,56 @@
 
                 <div class="form-group">
                     <label for="videoDescription">
-                        Description<span class="required">*</span>
+                        Descripcion<span class="required">*</span>
                     </label>
                     <textarea 
                         id="videoDescription" 
                         name="videoDescription" 
-                        placeholder="Describe your video..." 
+                        placeholder="Describe tu video..." 
                         required
                         maxlength="500"
                     ></textarea>
-                    <p class="form-help">Maximum 500 characters</p>
+                    <p class="form-help">Máximo 500 caracteres</p>
                 </div>
 
                 <div class="form-group">
                     <label for="videoCategory">
-                        Category<span class="required">*</span>
+                        Categoría<span class="required">*</span>
                     </label>
                     <select id="videoCategory" name="videoCategory" required>
-                        <option value="">Select a category</option>
-                        <option value="music">Music</option>
-                        <option value="gaming">Gaming</option>
-                        <option value="education">Education</option>
-                        <option value="entertainment">Entertainment</option>
-                        <option value="sports">Sports</option>
-                        <option value="technology">Technology</option>
-                        <option value="lifestyle">Lifestyle</option>
-                        <option value="other">Other</option>
+                        <option value="">Selecciona una categoría</option>
+                        <option value="Musica">Musica</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Educacion">Educacion</option>
+                        <option value="Entretenimiento">Entretenimiento</option>
+                        <option value="Deportes">Deportes</option>
+                        <option value="Tecnologia">Tecnología</option>
+                        <option value="EstiloDeVida">Estilo de vida</option>
+                        <option value="Otros">Otros</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>
-                        Tags
+                        Etiquetas
                     </label>
                     <div class="tags-input-container" id="tagsContainer">
                         <input 
                             type="text" 
                             class="tag-input" 
                             id="tagInput" 
-                            placeholder="Type a tag and press Enter..."
+                            placeholder="Escribe etiquetas y presiona intro "
                         >
                     </div>
-                    <p class="form-help">Press Enter to add tags. Maximum 10 tags.</p>
+                    <p class="form-help">presiona intro para agregar etiquetas.Máximo 10 etiquetas.</p>
                 </div>
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">
-                        Cancel
+                        Cancelar
                     </button>
                     <button type="submit" class="btn btn-primary" id="submitBtn">
-                        Add Video
+                        Añadir Video
                     </button>
                 </div>
             </form>
@@ -135,10 +137,10 @@
                 <a href="#" aria-label="YouTube">▶</a>
             </div>
             <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact</a>
-                <a href="#">About</a>
+                <a href="#">Política de privacidad</a>
+                <a href="#">Terminos y Servicios</a>
+                <a href="#">Contacto</a>
+                <a href="#">Sobre nosotros</a>
             </div>
         </div>
     </footer>

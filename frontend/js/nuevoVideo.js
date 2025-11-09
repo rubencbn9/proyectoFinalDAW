@@ -88,21 +88,22 @@
             
             // Disable submit button and show loading
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner"></span>Adding video...';
+            submitBtn.innerHTML = '<span class="spinner"></span>Añadiendo video...';
             
-            // Prepare form data
+
             const formData = {
-                url: document.getElementById('videoUrl').value.trim(),
-                title: document.getElementById('videoTitle').value.trim(),
-                description: document.getElementById('videoDescription').value.trim(),
-                category: document.getElementById('videoCategory').value,
-                tags: tags,
-                platform: detectPlatform(document.getElementById('videoUrl').value.trim())
+             titulo: document.getElementById('videoTitle').value.trim(),
+             url: document.getElementById('videoUrl').value.trim(),
+             categoria: document.getElementById('videoCategory').value,
+            descripcion: document.getElementById('videoDescription').value.trim(),
+            fuente: detectPlatform(document.getElementById('videoUrl').value.trim()), // plataforma
+            usuarioId: 1, // poner logica para obtener usuario que añade el video
+            fechaGuardado: new Date().toISOString() 
             };
-            
+
             try {
                 // Send POST request to backend
-                const response = await fetch('http://localhost:9000/api/videos', {
+                const response = await fetch('http://localhost:9000/api/videos/send', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -112,7 +113,7 @@
                 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('[v0] Video added successfully:', data);
+                    console.log(' Video added successfully:', data);
                     
                     // Show success message
                     successAlert.classList.add('active');
@@ -123,7 +124,7 @@
                     document.querySelectorAll('.tag').forEach(tag => tag.remove());
                     videoPreview.classList.remove('active');
                     
-                    // Scroll to top to show success message
+                    // Scroll to top to show success message 
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     
                     // Redirect to home after 2 seconds
@@ -134,7 +135,7 @@
                     throw new Error('Failed to add video');
                 }
             } catch (error) {
-                console.error('[v0] Error adding video:', error);
+                console.error(' Error adding video:', error);
                 errorAlert.textContent = error.message || 'An error occurred. Please try again.';
                 errorAlert.classList.add('active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
