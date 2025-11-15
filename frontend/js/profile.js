@@ -125,6 +125,7 @@ async function changePassword() {
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
+    // Validaciones frontend
     if (!currentPassword || !newPassword || !confirmPassword) {
         showNotification('Por favor rellena todos los campos de contraseña', 'error');
         return;
@@ -140,49 +141,111 @@ async function changePassword() {
         return;
     }
 
-    try {
-        // Aquí irá endpoint de cambio de contraseña
-      
+    if (newPassword === currentPassword) {
+        showNotification('La nueva contraseña debe ser diferente a la actual', 'error');
+        return;
+    }
 
-        // Por ahora simulamos el cambio exitoso
-        showNotification('¡Contraseña cambiada correctamente!', 'success');
+    // Deshabilitar botón mientras se procesa
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Cambiando...';
+
+    try {
+        const response = await fetch(`${API_URL}/auth/change-password`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ 
+                currentPassword, 
+                newPassword 
+            })
+        });
+
+        const data = await response.text();
+
+        if (!response.ok) {
+            throw new Error(data || 'Error al cambiar contraseña');
+        }
+
+        showNotification('✅ Contraseña cambiada correctamente', 'success');
         document.getElementById('securityForm').reset();
         
     } catch (error) {
         console.error('Error al cambiar contraseña:', error);
-        showNotification('Error al cambiar la contraseña', 'error');
+        showNotification(error.message || 'Error al cambiar la contraseña', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
     }
 }
 
 // Guardar cambios del perfil
 async function saveChanges() {
+    const userData = {
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+    };
+
+    // Validaciones
+    if (!userData.username || !userData.email) {
+        showNotification('Por favor rellena todos los campos', 'error');
+        return;
+    }
+
+    if (!userData.email.includes('@')) {
+        showNotification('Email inválido', 'error');
+        return;
+    }
+
+    // Deshabilitar botón mientras se procesa
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+
     try {
-        const userData = {
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            // firstName: document.getElementById('firstName')?.value,
-            // lastName: document.getElementById('lastName')?.value,
-            // bio: document.getElementById('bio')?.value
-        };
+        const token = localStorage.getItem('token');
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const username = payload.sub;
 
-        // Aquí ira endpoint de actualizacion de perfil
-        // const response = await fetch(`${API_URL}/users/update`, {
-        //     method: 'PUT',
-        //     headers: getAuthHeaders(),
-        //     body: JSON.stringify(userData)
-        // });
+        // Obtener ID del usuario
+        const userResponse = await fetch(`${API_URL}/usuarios/buscar?nombre=${username}`, {
+            headers: getAuthHeaders()
+        });
 
-        showNotification('¡Cambios guardados correctamente!', 'success');
+        if (!userResponse.ok) {
+            throw new Error('No se pudo obtener información del usuario');
+        }
+
+        const usuario = await userResponse.json();
+
+        // Actualizar usuario
+        const response = await fetch(`${API_URL}/usuarios/${usuario.idUsuario}`, {
+            method: 'PUT',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error || 'Error al guardar cambios');
+        }
+
+        showNotification('✅ Cambios guardados correctamente', 'success');
         
-        // Actualizar localStorage si cambiamos el username
+        // Actualizar localStorage si cambiaste el username
         localStorage.setItem('username', userData.username);
         
-        // Sube para mostrar mensaje
+        // Scroll to top para mostrar mensaje
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (error) {
         console.error('Error al guardar cambios:', error);
-        showNotification('Error al guardar los cambios', 'error');
+        showNotification(error.message || 'Error al guardar los cambios', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
     }
 }
 
