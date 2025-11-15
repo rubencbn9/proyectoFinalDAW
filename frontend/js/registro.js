@@ -53,7 +53,7 @@
                 // Guardar token y datos del usuario
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
-                localStorage.setItem('nombre', data.nombre);
+                // localStorage.setItem('nombre', data.nombre);
 
                 // Redirigir al index
                 window.location.href = '/index.html';
@@ -70,7 +70,7 @@
             e.preventDefault();
             hideError();
 
-            const nombre = document.getElementById('register-nombre').value;
+            // const nombre = document.getElementById('register-nombre').value;
             const username = document.getElementById('register-username').value;
             const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
@@ -84,7 +84,7 @@
                 const response = await fetch(`${API_URL}/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nombre, username, email, password })
+                    body: JSON.stringify({ username, email, password })
                 });
 
                 if (!response.ok) {
@@ -97,7 +97,7 @@
                 // Guardar token y datos del usuario
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
-                localStorage.setItem('nombre', data.nombre);
+                // localStorage.setItem('nombre', data.nombre);
 
                 // Redirigir al index
                 window.location.href = '/index.html';
@@ -110,7 +110,7 @@
             }
         }
 
-        // Verificar si ya está logueado
+        // Verificar si ya esta logueado
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if (token) {

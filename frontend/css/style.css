@@ -61,6 +61,10 @@
             color: var(--accent-primary);
         }
 
+        .nombreUsuario{
+            color: var(--accent-primary)
+        }
+
 
 
 .logout-btn {
