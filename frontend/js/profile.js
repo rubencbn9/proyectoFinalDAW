@@ -50,7 +50,7 @@ async function loadUserData() {
         // Actualizar campos del formulario
         document.getElementById('username').value = usuario.username || 'No disponible';
         document.getElementById('email').value = usuario.email || 'No disponible';
-        
+
         // Formatear y mostrar fecha de registro
         if (usuario.fechaRegistro) {
             const fecha = new Date(usuario.fechaRegistro);
@@ -60,11 +60,11 @@ async function loadUserData() {
                 day: 'numeric'
             });
         }
-        
+
         // Actualizar foto de perfil con inicial
         const primeraLetra = (usuario.username || 'U').charAt(0).toUpperCase();
         document.getElementById('profilePicture').textContent = primeraLetra;
-        
+
         // Actualizar botón del header
         const headerProfileBtn = document.getElementById('headerProfileBtn');
         if (headerProfileBtn) {
@@ -77,7 +77,7 @@ async function loadUserData() {
     } catch (error) {
         console.error('Error al cargar datos del usuario:', error);
         showNotification(`Error al cargar datos: ${error.message}`, 'error');
-        
+
         // Si hay un error de autenticación, redirigir
         if (error.message.includes('401') || error.message.includes('403')) {
             setTimeout(() => {
@@ -103,7 +103,7 @@ function uploadPhoto() {
                 profilePic.style.backgroundSize = 'cover';
                 profilePic.style.backgroundPosition = 'center';
                 profilePic.textContent = '';
-                
+
                 // Aquí podría enviar la imagen 
             };
             reader.readAsDataURL(file);
@@ -156,9 +156,9 @@ async function changePassword() {
         const response = await fetch(`${API_URL}/auth/change-password`, {
             method: 'POST',
             headers: getAuthHeaders(),
-            body: JSON.stringify({ 
-                currentPassword, 
-                newPassword 
+            body: JSON.stringify({
+                currentPassword,
+                newPassword
             })
         });
 
@@ -170,7 +170,7 @@ async function changePassword() {
 
         showNotification('✅ Contraseña cambiada correctamente', 'success');
         document.getElementById('securityForm').reset();
-        
+
     } catch (error) {
         console.error('Error al cambiar contraseña:', error);
         showNotification(error.message || 'Error al cambiar la contraseña', 'error');
@@ -233,10 +233,10 @@ async function saveChanges() {
         }
 
         showNotification('✅ Cambios guardados correctamente', 'success');
-        
+
         // Actualizar localStorage si cambiaste el username
         localStorage.setItem('username', userData.username);
-        
+
         // Scroll to top para mostrar mensaje
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -261,7 +261,7 @@ function cancelChanges() {
 //         // Aquí irá la lógica de desactivación
 //         let eliminacion = delete
 //         showNotification('Cuenta desactivada. Serás redirigido al login.', 'success');
-        
+
 //         setTimeout(() => {
 //             localStorage.clear();
 //             window.location.href = '/registro.html';
@@ -272,13 +272,13 @@ function cancelChanges() {
 // Eliminar cuenta
 async function deleteAccount() {
     const confirmation = prompt('Esta acción no se puede deshacer. Escribe "ELIMINAR" para confirmar:');
-    
+
     if (confirmation === 'ELIMINAR') {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
                 showNotification('No hay sesión activa', 'error');
-                window.location.href = '/login.html';
+                window.location.href = '/registro.html';
                 return;
             }
 
@@ -296,12 +296,12 @@ async function deleteAccount() {
             }
 
             showNotification('Cuenta eliminada. Toda tu información ha sido borrada.', 'success');
-            
+
             setTimeout(() => {
                 localStorage.clear();
                 window.location.href = '/registro.html';
             }, 2000);
-            
+
         } catch (error) {
             console.error('Error al eliminar cuenta:', error);
             showNotification('Error al eliminar la cuenta: ' + error.message, 'error');
@@ -316,7 +316,7 @@ function handleLogout() {
     if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
         localStorage.clear();
         showNotification('👋 Sesión cerrada correctamente', 'success');
-        
+
         setTimeout(() => {
             window.location.href = '/registro.html';
         }, 1000);
@@ -363,7 +363,7 @@ function showNotification(message, type = 'success') {
     }
 
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         notification.style.animation = 'slideInRight 0.3s ease reverse';
         setTimeout(() => notification.remove(), 300);
@@ -373,7 +373,7 @@ function showNotification(message, type = 'success') {
 // Inicializar cuando se carga la pagina
 window.addEventListener('DOMContentLoaded', () => {
     loadUserData();
-    
+
     // Si existe el botón de logout en esta página, agregarlo
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
