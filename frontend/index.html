@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VideoHub - Discover Videos</title>
     <link rel="stylesheet" href="css/style.css">
-    
-    
+
+
 </head>
+
 <body>
     <header>
         <div class="header-container">
@@ -16,19 +18,15 @@
                 <input type="text" class="search-bar" placeholder="Busca tus vídeos YouTube, TikTok, Vimeo...">
             </div>
             <div class="card" role="region" aria-label="Agregar video">
-            <a id="top-user" href="/profile.html">
-                
-                <button class="profile-btn" id="profile-inicial" aria-label="Profile">R</button>
-                   <button 
-    class="logout-btn" 
-    onclick="handleLogout()" 
-    aria-label="Cerrar sesión"
->
-    logout
-</button>
-            </a>
-         
-        </div>
+                <a id="top-user" href="/profile.html">
+
+                    <button class="profile-btn" id="profile-inicial" aria-label="Profile">R</button>
+                    <button class="logout-btn" onclick="handleLogout()" aria-label="Cerrar sesión">
+                        logout
+                    </button>
+                </a>
+
+            </div>
     </header>
 
     <div class="main-container">
@@ -48,8 +46,8 @@
                     <label for="vimeo">Vimeo</label>
                 </div>
                 <div class="filter-option">
-                    <input type="checkbox" id="instagram">
-                    <label for="instagram">Instagram</label>
+                    <input type="checkbox" id="dailymotion">
+                    <label for="dailymotion">Dailymotion</label>
                 </div>
             </div>
 
@@ -123,11 +121,11 @@
             </div>
 
             <div class="video-grid" id="videoGrid">
-                 Videos generados por javascript 
+                Videos generados por javascript
             </div>
         </main>
     </div>
- 
+
     <footer>
         <div class="footer-container">
             <div class="social-links">
@@ -138,7 +136,7 @@
                 <a href="#" class="social-link" aria-label="LinkedIn">in</a>
             </div>
             <div class="footer-links">
-                 <a href="#">Política de privacidad</a>
+                <a href="#">Política de privacidad</a>
                 <a href="#">Terminos y Servicios</a>
                 <a href="#">Contacto</a>
                 <a href="#">Sobre nosotros</a>
@@ -148,4 +146,5 @@
 
     <script src="js/main.js"></script>
 </body>
+
 </html>

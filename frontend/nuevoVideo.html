@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Video - VideoVault</title>
     <link rel="stylesheet" href="/css/nuevoVideo.css">
 </head>
+
 <body>
-      <header>
+    <header>
         <div class="header-container">
             <a href="/index.html" class="logo">Video<span>Vault</span></a>
-            <div class="search-container">
+            <!-- <div class="search-container">
                 <input type="text" class="search-bar" placeholder="Busca videos de Youtube,TikTok,Vimeo...">
-            </div>
+            </div> -->
             <div class="card" role="region" aria-label="Agregar video">
                 <a id="top-user" href="/profile.html">
                     <button class="profile-btn" aria-label="Profile" id="headerProfileBtn">U</button>
@@ -41,13 +43,8 @@
                     <label for="videoUrl">
                         Video URL<span class="required">*</span>
                     </label>
-                    <input 
-                        type="url" 
-                        id="videoUrl" 
-                        name="videoUrl" 
-                        placeholder="https://www.youtube.com/watch?v=..." 
-                        required
-                    >
+                    <input type="url" id="videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=..."
+                        required>
                     <p class="form-help">Pega la URL del video que quieres añadir</p>
                     <div class="video-preview" id="videoPreview">
                         <h3>Plataforma detectada</h3>
@@ -61,27 +58,16 @@
                     <label for="videoTitle">
                         Titulo<span class="required">*</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="videoTitle" 
-                        name="videoTitle" 
-                        placeholder="Introduce un titulo al video" 
-                        required
-                        maxlength="100"
-                    >
+                    <input type="text" id="videoTitle" name="videoTitle" placeholder="Introduce un titulo al video"
+                        required maxlength="100">
                 </div>
 
                 <div class="form-group">
                     <label for="videoDescription">
                         Descripcion<span class="required">*</span>
                     </label>
-                    <textarea 
-                        id="videoDescription" 
-                        name="videoDescription" 
-                        placeholder="Describe tu video..." 
-                        required
-                        maxlength="500"
-                    ></textarea>
+                    <textarea id="videoDescription" name="videoDescription" placeholder="Describe tu video..." required
+                        maxlength="500"></textarea>
                     <p class="form-help">Máximo 500 caracteres</p>
                 </div>
 
@@ -107,12 +93,8 @@
                         Etiquetas
                     </label>
                     <div class="tags-input-container" id="tagsContainer">
-                        <input 
-                            type="text" 
-                            class="tag-input" 
-                            id="tagInput" 
-                            placeholder="Escribe etiquetas y presiona intro "
-                        >
+                        <input type="text" class="tag-input" id="tagInput"
+                            placeholder="Escribe etiquetas y presiona intro ">
                     </div>
                     <p class="form-help">presiona intro para agregar etiquetas.Máximo 10 etiquetas.</p>
                 </div>
@@ -148,4 +130,5 @@
 
     <script src="js/nuevoVideo.js"></script>
 </body>
+
 </html>

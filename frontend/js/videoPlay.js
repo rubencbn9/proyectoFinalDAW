@@ -64,8 +64,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const video = await response.json();
 
     console.log("Video data:", video);
-    console.log("URL del video:", video.url);
-    console.log("Fuente:", video.fuente);
 
     // Actualizar elementos existentes en el HTML
     document.querySelector(".video-title").textContent = video.titulo;
@@ -78,9 +76,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const embedResult = await generateEmbedCode(video.url, video.fuente);
-
-    console.log("Embed result:", embedResult);
-    console.log("Platform detectada:", embedResult.detectedPlatform);
 
     if (embedResult.html) {
       console.log("Insertando HTML del video...");
@@ -123,28 +118,39 @@ document.addEventListener("DOMContentLoaded", async () => {
       profileBtn.setAttribute("aria-label", `Perfil de ${nombreUsuario}`);
     }
 
-    // === SISTEMA DE MARCADORES Y NOTAS ===
-    const markersList = document.getElementById("markersList");
+    // ========================================
+    // SISTEMA DE MOMENTOS DESTACADOS
+    // ========================================
+
+    const momentosList = document.getElementById("markersList");
     const notesArea = document.getElementById("notesArea");
     const markerLabel = document.getElementById("markerLabel");
     const addMarkerBtn = document.getElementById("addMarkerBtn");
     const saveNotesBtn = document.getElementById("saveNotesBtn");
 
-    let markers = [];
+    let momentos = [];
     let savedNotes = "";
 
-    // Cargar datos desde storage persistente
-    await loadStoredData();
+    // Cargar momentos y notas
+    await loadMomentos();
+    await loadNotas();
 
-    async function loadStoredData() {
+    async function loadMomentos() {
       try {
-        // Cargar marcadores
-        const markersData = await window.storage.get(`videoMarkers_${videoId}`);
-        if (markersData && markersData.value) {
-          markers = JSON.parse(markersData.value);
+        const data = await window.storage.get(`videoMomentos_${videoId}`);
+        if (data && data.value) {
+          momentos = JSON.parse(data.value);
         }
+      } catch (error) {
+        console.log('Intentando cargar desde localStorage...');
+        const local = localStorage.getItem(`videoMomentos_${videoId}`);
+        if (local) momentos = JSON.parse(local);
+      }
+      renderMomentos();
+    }
 
-        // Cargar notas
+    async function loadNotas() {
+      try {
         const notesData = await window.storage.get(`videoNotes_${videoId}`);
         if (notesData && notesData.value) {
           savedNotes = notesData.value;
@@ -153,156 +159,223 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         }
       } catch (error) {
-        console.log('No hay datos guardados previamente:', error);
-        // Intentar con localStorage como fallback
-        try {
-          const localMarkers = localStorage.getItem(`videoMarkers_${videoId}`);
-          const localNotes = localStorage.getItem(`videoNotes_${videoId}`);
-
-          if (localMarkers) markers = JSON.parse(localMarkers);
-          if (localNotes) {
-            savedNotes = localNotes;
-            if (notesArea) notesArea.value = savedNotes;
-          }
-        } catch (e) {
-          console.log('No hay datos en localStorage');
+        const localNotes = localStorage.getItem(`videoNotes_${videoId}`);
+        if (localNotes && notesArea) {
+          notesArea.value = localNotes;
         }
       }
     }
 
-    renderMarkers();
+    function renderMomentos() {
+      if (!momentosList) return;
 
-    function renderMarkers() {
-      if (!markersList) return;
+      momentosList.innerHTML = "";
 
-      markersList.innerHTML = "";
+      if (momentos.length === 0) {
+        momentosList.innerHTML = `
+          <div style="text-align: center; padding: 30px 20px; color: #666; background: #0a0a0a; border-radius: 8px; border: 2px dashed #2a2a2a;">
+            <div style="font-size: 48px; margin-bottom: 10px; opacity: 0.5;">📝</div>
+            <p style="font-size: 15px; font-weight: 600; margin-bottom: 5px; color: #888;">No hay momentos destacados</p>
+            <p style="font-size: 13px; color: #666;">Agrega timestamps importantes del video para recordar momentos clave</p>
+          </div>
+        `;
+        return;
+      }
 
-      markers.forEach((marker, index) => {
+      momentos.forEach((momento, index) => {
         const li = document.createElement("li");
-        li.style.cssText = "padding: 10px; background: #2a2a2a; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;";
-
-        li.innerHTML = `
-          <span style="color: #00d9ff; cursor: pointer;" class="marker-time">${marker.time}</span>
-          <span style="flex: 1; margin: 0 15px; color: #fff;">${marker.label}</span>
-          <button class="delete-marker" data-index="${index}" style="background: #ff4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Eliminar</button>
+        li.style.cssText = `
+          padding: 15px;
+          background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+          margin-bottom: 12px;
+          border-radius: 8px;
+          border-left: 4px solid #00d9ff;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          list-style: none;
         `;
 
-        markersList.appendChild(li);
-      });
+        li.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                <span style="background: #00d9ff; color: #0a0a0a; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">
+                  ⏱️ ${momento.time}
+                </span>
+                <span style="color: #666; font-size: 11px;">
+                  ${momento.fecha ? new Date(momento.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }) : ''}
+                </span>
+              </div>
+              <h4 style="color: #fff; margin: 0 0 5px 0; font-size: 15px; font-weight: 600;">
+                ${momento.titulo}
+              </h4>
+              ${momento.descripcion ? `
+                <p style="color: #888; font-size: 13px; margin: 0; line-height: 1.4;">
+                  ${momento.descripcion}
+                </p>
+              ` : ''}
+              ${momento.tags && momento.tags.length > 0 ? `
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
+                  ${momento.tags.map(tag => `
+                    <span style="background: #333; color: #00d9ff; padding: 3px 8px; border-radius: 10px; font-size: 11px;">
+                      #${tag}
+                    </span>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+            <button 
+              class="delete-momento" 
+              data-index="${index}"
+              style="background: rgba(255, 68, 68, 0.2); color: #ff4444; border: 1px solid #ff4444; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.3s ease; flex-shrink: 0; margin-left: 10px;"
+              title="Eliminar momento">
+              🗑️
+            </button>
+          </div>
+        `;
 
-      document.querySelectorAll(".marker-time").forEach((el, index) => {
-        el.addEventListener("click", () => {
-          jumpToTime(markers[index].time);
+        li.addEventListener('mouseenter', () => {
+          li.style.background = 'linear-gradient(135deg, #333 0%, #222 100%)';
+          li.style.transform = 'translateX(5px)';
         });
+        li.addEventListener('mouseleave', () => {
+          li.style.background = 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)';
+          li.style.transform = 'translateX(0)';
+        });
+
+        momentosList.appendChild(li);
       });
 
-      document.querySelectorAll(".delete-marker").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
+      document.querySelectorAll(".delete-momento").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          e.stopPropagation();
           const index = parseInt(e.target.dataset.index);
-          deleteMarker(index);
+          if (confirm("¿Eliminar este momento destacado?")) {
+            momentos.splice(index, 1);
+            await saveMomentos();
+            renderMomentos();
+            showNotification("🗑️ Momento eliminado", "success");
+          }
+        });
+
+        btn.addEventListener('mouseenter', (e) => {
+          e.target.style.background = '#ff4444';
+          e.target.style.color = 'white';
+        });
+        btn.addEventListener('mouseleave', (e) => {
+          e.target.style.background = 'rgba(255, 68, 68, 0.2)';
+          e.target.style.color = '#ff4444';
         });
       });
     }
 
-    if (addMarkerBtn) {
-      addMarkerBtn.addEventListener("click", async () => {
-        const currentTime = getCurrentTime();
-        const label = markerLabel ? markerLabel.value.trim() : "";
+    async function addMomento() {
+      const timeInput = document.getElementById("markerLabel");
+      if (!timeInput) return;
 
-        if (!label) {
-          alert("Por favor, escribe una etiqueta para el marcador");
-          return;
-        }
+      const titulo = timeInput.value.trim();
+      if (!titulo) {
+        showNotification("⚠️ Por favor, escribe un título para el momento", "error");
+        return;
+      }
 
-        markers.push({
-          time: currentTime,
-          label: label,
-        });
+      const time = prompt("⏱️ Timestamp del momento (MM:SS):", "00:00");
+      if (!time) return;
 
-        try {
-          await window.storage.set(`videoMarkers_${videoId}`, JSON.stringify(markers));
-          console.log('Marcadores guardados correctamente');
-        } catch (error) {
-          console.error('Error al guardar marcadores:', error);
-          localStorage.setItem(`videoMarkers_${videoId}`, JSON.stringify(markers));
-        }
+      if (!/^\d{1,2}:\d{2}$/.test(time)) {
+        showNotification("⚠️ Formato de tiempo inválido. Usa MM:SS", "error");
+        return;
+      }
 
-        if (markerLabel) {
-          markerLabel.value = "";
-        }
+      const descripcion = prompt("📝 Descripción (opcional):", "");
+      const tagsInput = prompt("🏷️ Tags separados por comas (opcional):", "");
+      const tags = tagsInput ? tagsInput.split(",").map(t => t.trim()).filter(t => t) : [];
 
-        renderMarkers();
-        alert("Marcador agregado y guardado");
+      const momento = {
+        time: time,
+        titulo: titulo,
+        descripcion: descripcion || "",
+        tags: tags,
+        fecha: new Date().toISOString()
+      };
+
+      momentos.push(momento);
+      momentos.sort((a, b) => {
+        const [minsA, secsA] = a.time.split(':').map(Number);
+        const [minsB, secsB] = b.time.split(':').map(Number);
+        return (minsA * 60 + secsA) - (minsB * 60 + secsB);
       });
+
+      await saveMomentos();
+      timeInput.value = "";
+      renderMomentos();
+      showNotification("✅ Momento destacado agregado", "success");
     }
 
-    function deleteMarker(index) {
-      if (confirm("¿Eliminar este marcador?")) {
-        markers.splice(index, 1);
-
-        window.storage.set(`videoMarkers_${videoId}`, JSON.stringify(markers))
-          .catch(error => {
-            console.error('Error al guardar:', error);
-            localStorage.setItem(`videoMarkers_${videoId}`, JSON.stringify(markers));
-          });
-
-        renderMarkers();
+    async function saveMomentos() {
+      try {
+        await window.storage.set(`videoMomentos_${videoId}`, JSON.stringify(momentos));
+        console.log('✅ Momentos guardados en storage');
+      } catch (error) {
+        console.log('Guardando en localStorage como fallback');
+        localStorage.setItem(`videoMomentos_${videoId}`, JSON.stringify(momentos));
       }
     }
+
+    if (addMarkerBtn) addMarkerBtn.addEventListener("click", addMomento);
 
     if (saveNotesBtn) {
       saveNotesBtn.addEventListener("click", async () => {
         if (notesArea) {
           const notesContent = notesArea.value;
-
           try {
             const result = await window.storage.set(`videoNotes_${videoId}`, notesContent);
-
             if (result) {
-              console.log('Notas guardadas correctamente:', result);
-              alert('✅ Notas guardadas correctamente');
+              console.log('✅ Notas guardadas correctamente');
+              showNotification("✅ Notas guardadas correctamente", "success");
             } else {
               throw new Error('No se recibió confirmación del guardado');
             }
           } catch (error) {
             console.error('Error al guardar notas:', error);
             localStorage.setItem(`videoNotes_${videoId}`, notesContent);
-            alert('⚠️ Notas guardadas localmente (solo en este navegador)');
+            showNotification("⚠️ Notas guardadas localmente", "success");
           }
         }
       });
     }
 
-    function getCurrentTime() {
-      const youtubeIframe = document.querySelector('iframe[src*="youtube.com"]');
-      if (youtubeIframe) {
-        const manualTime = prompt("Introduce el tiempo actual (MM:SS):", "00:00");
-        return manualTime || "00:00";
+    function showNotification(message, type) {
+      const notif = document.createElement('div');
+      notif.textContent = message;
+      notif.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        background: ${type === 'success' ? '#00d9ff' : '#ff4444'};
+        color: ${type === 'success' ? '#0a0a0a' : '#fff'};
+        border-radius: 8px;
+        font-weight: 600;
+        z-index: 10000;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease;
+      `;
+
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(400px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+      `;
+      if (!document.getElementById('notification-style')) {
+        style.id = 'notification-style';
+        document.head.appendChild(style);
       }
 
-      const videoEl = document.querySelector("video");
-      if (videoEl) {
-        const seconds = Math.floor(videoEl.currentTime);
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-      }
-
-      const manualTime = prompt("Introduce el tiempo actual (MM:SS):", "00:00");
-      return manualTime || "00:00";
-    }
-
-    function jumpToTime(timeString) {
-      const [mins, secs] = timeString.split(":").map(Number);
-      const totalSeconds = mins * 60 + secs;
-
-      const videoEl = document.querySelector("video");
-      if (videoEl) {
-        videoEl.currentTime = totalSeconds;
-        return;
-      }
-
-      alert(`Salta manualmente a: ${timeString}`);
+      document.body.appendChild(notif);
+      setTimeout(() => notif.remove(), 3000);
     }
 
     // === FUNCIONES DE EMBED ===
@@ -320,9 +393,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function generateEmbedCode(url, fuente) {
       const platform = detectPlatform(url, fuente);
 
-      console.log("Generando embed para plataforma:", platform);
-      console.log("URL recibida:", url);
-
       switch (platform) {
         case "youtube":
           return generateYouTubeEmbed(url);
@@ -332,6 +402,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           return generateDailymotionEmbed(url);
         case "twitch":
           return generateTwitchEmbed(url);
+        // === NUEVO: CASO TIKTOK ===
+        case "tiktok":
+          return generateTikTokEmbed(url);
         case "direct":
           return generateDirectVideoEmbed(url);
         default:
@@ -351,10 +424,48 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (urlLower.includes("vimeo.com")) return "vimeo";
       if (urlLower.includes("dailymotion.com")) return "dailymotion";
       if (urlLower.includes("twitch.tv")) return "twitch";
+      // === NUEVO: DETECCIÓN TIKTOK ===
+      if (urlLower.includes("tiktok.com")) return "tiktok";
+
       if (urlLower.match(/\.(mp4|webm|ogg)$/i)) return "direct";
 
       return fuente || "unknown";
     }
+
+    // === TIKTOK EMBED (NUEVO) ===
+    function generateTikTokEmbed(url) {
+      const videoId = extractTikTokId(url);
+
+      if (!videoId) {
+        return {
+          html: null,
+          message: "No se pudo extraer el ID del video de TikTok",
+          platform: "tiktok",
+        };
+      }
+
+      // TikTok v2 embed (vertical, centrado, responsivo móvil)
+      return {
+        html: `
+          <iframe 
+            src="https://www.tiktok.com/embed/v2/${videoId}" 
+            width="100%" 
+            frameborder="0" 
+            allowfullscreen
+            style="border-radius: 12px; aspect-ratio: 9/16; display: block; max-width: 325px; margin: 0 auto;">
+          </iframe>
+        `,
+        needsScript: false,
+        detectedPlatform: "TikTok",
+      };
+    }
+
+    function extractTikTokId(url) {
+      const match = url.match(/video\/(\d+)/);
+      return match ? match[1] : null;
+    }
+
+    // === OTRAS PLATAFORMAS (ACTUALIZADO: aspect-ratio en lugar de height fijo) ===
 
     function generateYouTubeEmbed(url) {
       const videoId = extractYouTubeId(url);
@@ -371,12 +482,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         html: `
           <iframe 
             width="100%" 
-            height="500" 
             src="https://www.youtube.com/embed/${videoId}" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowfullscreen
-            style="border-radius: 12px;">
+            style="border-radius: 12px; aspect-ratio: 16/9; display: block;">
           </iframe>
         `,
         needsScript: false,
@@ -395,13 +505,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const match = url.match(pattern);
         if (match) return match[1];
       }
-
       return null;
     }
 
     function generateVimeoEmbed(url) {
       const videoId = extractVimeoId(url);
-
       if (!videoId) {
         return {
           html: null,
@@ -409,17 +517,15 @@ document.addEventListener("DOMContentLoaded", async () => {
           platform: "vimeo",
         };
       }
-
       return {
         html: `
           <iframe 
             src="https://player.vimeo.com/video/${videoId}" 
             width="100%" 
-            height="500" 
             frameborder="0" 
             allow="autoplay; fullscreen; picture-in-picture" 
             allowfullscreen
-            style="border-radius: 12px;">
+            style="border-radius: 12px; aspect-ratio: 16/9; display: block;">
           </iframe>
         `,
         needsScript: false,
@@ -434,7 +540,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function generateDailymotionEmbed(url) {
       const videoId = extractDailymotionId(url);
-
       if (!videoId) {
         return {
           html: null,
@@ -442,17 +547,15 @@ document.addEventListener("DOMContentLoaded", async () => {
           platform: "dailymotion",
         };
       }
-
       return {
         html: `
           <iframe 
             frameborder="0" 
             width="100%" 
-            height="500" 
             src="https://www.dailymotion.com/embed/video/${videoId}" 
             allowfullscreen 
             allow="autoplay"
-            style="border-radius: 12px;">
+            style="border-radius: 12px; aspect-ratio: 16/9; display: block;">
           </iframe>
         `,
         needsScript: false,
@@ -467,7 +570,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function generateTwitchEmbed(url) {
       const channel = extractTwitchChannel(url);
-
       if (!channel) {
         return {
           html: null,
@@ -475,15 +577,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           platform: "twitch",
         };
       }
-
       return {
         html: `
           <iframe 
             src="https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}" 
-            height="500" 
             width="100%" 
             allowfullscreen
-            style="border-radius: 12px;">
+            style="border-radius: 12px; aspect-ratio: 16/9; display: block;">
           </iframe>
         `,
         needsScript: false,
@@ -506,9 +606,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         html: `
           <video 
             width="100%" 
-            height="500" 
             controls 
-            style="border-radius: 12px; background: #000;">
+            style="border-radius: 12px; background: #000; aspect-ratio: 16/9; display: block;">
             <source src="${videoUrl}" type="video/mp4">
             <source src="${videoUrl}" type="video/webm">
             <source src="${videoUrl}" type="video/ogg">

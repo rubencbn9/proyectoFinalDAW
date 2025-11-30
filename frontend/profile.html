@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración Perfil - VideoVault</title>
     <link rel="stylesheet" href="css/profile.css">
 </head>
+
 <body>
 
     <header>
         <div class="header-container">
             <a href="/index.html" class="logo">Video<span>Vault</span></a>
-            <div class="search-container">
+            <!-- <div class="search-container">
                 <input type="text" class="search-bar" placeholder="Busca videos de Youtube,TikTok,Vimeo...">
-            </div>
+            </div> -->
             <div class="card" role="region" aria-label="Agregar video">
                 <a id="top-user" href="/profile.html">
                     <button class="profile-btn" aria-label="Profile" id="headerProfileBtn">U</button>
@@ -31,7 +33,8 @@
         <div class="profile-container">
             <!-- Botón de Cerrar Sesión destacado -->
             <div class="profile-section logout-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                     <div>
                         <h2 class="section-title" style="margin-bottom: 0.5rem; color: #00d4ff;">Sesión</h2>
                         <p style="color: #a0a0a0; margin: 0;">Cierra tu sesión de forma segura</p>
@@ -148,7 +151,8 @@
 
             <div class="profile-section">
                 <h2 class="section-title" style="color: #ff3b30;">Zona de peligro</h2>
-                <p style="color: #a0a0a0; margin-bottom: 1rem;">Estas acciones son irreversibles. Por favor ten cuidado</p>
+                <p style="color: #a0a0a0; margin-bottom: 1rem;">Estas acciones son irreversibles. Por favor ten cuidado
+                </p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                     <button class="btn btn-danger" onclick="deactivateAccount()">Desactivar cuenta</button>
                     <button class="btn btn-danger" onclick="deleteAccount()">Borrar cuenta</button>
@@ -182,4 +186,5 @@
 
     <script src="js/profile.js"></script>
 </body>
+
 </html>

@@ -364,7 +364,7 @@ const platformFilters = {
   youtube: "YouTube",
   tiktok: "TikTok",
   vimeo: "Vimeo",
-  instagram: "Instagram",
+  dailymotion: "Dailymotion",
 };
 
 Object.keys(platformFilters).forEach((id) => {
