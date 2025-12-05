@@ -926,3 +926,15 @@ footer {
 .btn-visto svg {
     flex-shrink: 0;
 }
+/* Profile button with image */
+.profile-btn.has-image {
+    padding: 0;
+    overflow: hidden;
+}
+
+.profile-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}

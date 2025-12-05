@@ -1,33 +1,36 @@
-// Tags functionality
+// Tags functionality - Solo si existen los elementos
 const tagInput = document.getElementById('tagInput');
 const tagsContainer = document.getElementById('tagsContainer');
 const tags = []; // Array para almacenar las etiquetas
 const MAX_TAGS = 10;
 
+// Solo agregar event listener si existe el elemento
+if (tagInput) {
+    tagInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const tagValue = this.value.trim();
 
-tagInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        const tagValue = this.value.trim();
-        
-        if (tagValue && tags.length < MAX_TAGS && !tags.includes(tagValue)) {
-            addTag(tagValue);
-            this.value = '';
+            if (tagValue && tags.length < MAX_TAGS && !tags.includes(tagValue)) {
+                addTag(tagValue);
+                this.value = '';
+            }
         }
-    }
-});
+    });
+}
 
 function addTag(tagValue) {
+    if (!tagsContainer || !tagInput) return;
     tags.push(tagValue);
-    
+
     const tagElement = document.createElement('span');
     tagElement.className = 'tag';
-    window.removeTag = removeTag; 
+    window.removeTag = removeTag;
     tagElement.innerHTML = `
         ${tagValue}
         <span class="tag-remove" onclick="removeTag('${tagValue}', this)">×</span>
     `;
-    
+
     tagsContainer.insertBefore(tagElement, tagInput);
 }
 
@@ -44,25 +47,27 @@ const videoUrlInput = document.getElementById('videoUrl');
 const videoPreview = document.getElementById('videoPreview');
 const platformInfo = document.getElementById('platformInfo');
 
-videoUrlInput.addEventListener('input', function() {
-    const url = this.value.trim();
-    
-    if (url) {
-        const platform = detectPlatform(url);
-        if (platform) {
-            platformInfo.textContent = `Platform: ${platform}`;
-            videoPreview.classList.add('active');
+if (videoUrlInput) {
+    videoUrlInput.addEventListener('input', function () {
+        const url = this.value.trim();
+
+        if (url) {
+            const platform = detectPlatform(url);
+            if (platform) {
+                if (platformInfo) platformInfo.textContent = `Platform: ${platform}`;
+                if (videoPreview) videoPreview.classList.add('active');
+            } else {
+                if (videoPreview) videoPreview.classList.remove('active');
+            }
         } else {
-            videoPreview.classList.remove('active');
+            if (videoPreview) videoPreview.classList.remove('active');
         }
-    } else {
-        videoPreview.classList.remove('active');
-    }
-});
+    });
+}
 
 // Obtener nombre del usuario guardado
-const nombreUsuario = localStorage.getItem('nombre') 
-    || localStorage.getItem('username') 
+const nombreUsuario = localStorage.getItem('nombre')
+    || localStorage.getItem('username')
     || 'Usuario';
 
 // Mostrar nombre completo si existe el contenedor
@@ -78,6 +83,37 @@ if (profileBtn) {
     profileBtn.textContent = inicial;
     profileBtn.setAttribute("aria-label", `Perfil de ${nombreUsuario}`);
 }
+
+// Cargar foto de perfil del usuario
+async function loadUserProfilePicture() {
+    const token = localStorage.getItem('jwtToken') || localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+        const response = await fetch('http://localhost:9000/api/auth/me', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) return;
+
+        const usuario = await response.json();
+        const profileBtn = document.querySelector('.profile-btn');
+
+        if (profileBtn && usuario.profilePicture) {
+            const UPLOAD_URL = 'http://localhost:9000/uploads';
+            profileBtn.innerHTML = `<img src="${UPLOAD_URL}/${usuario.profilePicture}" alt="Perfil">`;
+            profileBtn.classList.add('has-image');
+        }
+    } catch (error) {
+        console.log('No se pudo cargar la foto de perfil');
+    }
+}
+
+// Cargar foto de perfil
+loadUserProfilePicture();
 
 
 function detectPlatform(url) {
@@ -102,96 +138,107 @@ const submitBtn = document.getElementById('submitBtn');
 const successAlert = document.getElementById('successAlert');
 const errorAlert = document.getElementById('errorAlert');
 
-form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    //Obtener el token ANTES de cualquier envío
-    const token = localStorage.getItem('jwtToken') || localStorage.getItem('token'); 
+if (form) {
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-    // Ocultar alertas previas
-    successAlert.classList.remove('active');
-    errorAlert.classList.remove('active');
-    
-    // Deshabilitar botón
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner"></span>Añadiendo video...';
-    
-    //Comprobar autenticación
-    if (!token) {
-        const authError = new Error('No hay sesión activa. Por favor, inicia sesión.');
-        console.error('Error de autenticación:', authError);
-        // Usar throw new Error() fuera de try/catch para un manejo más simple.
-        errorAlert.textContent = authError.message;
-        errorAlert.classList.add('active');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Añadir Video';
-        return; 
-    }
+        //Obtener el token ANTES de cualquier envío
+        const token = localStorage.getItem('jwtToken') || localStorage.getItem('token');
 
-    //  Construir formData 
-    const formData = {
-        titulo: document.getElementById('videoTitle').value.trim(),
-        descripcion: document.getElementById('videoDescription').value.trim(),
-        url: document.getElementById('videoUrl').value.trim(),
-        fuente: detectPlatform(document.getElementById('videoUrl').value.trim()), 
-        miniaturaUrl: null, 
-        visto: false,
-        // Enviar el nombre de la categoría 
-        categoria: document.getElementById('videoCategory').value, 
-        etiquetas: tags, 
-        // El backend debe ignorar esto y usar el ID del JWT, pero lo dejamos por si acaso
-        usuarioId: 1 
-    };
+        // Ocultar alertas previas
+        if (successAlert) successAlert.classList.remove('active');
+        if (errorAlert) errorAlert.classList.remove('active');
 
-    try {
-        //Enviar solicitud con el token
-        const response = await fetch('http://localhost:9000/api/videos/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // <-- ¡CRÍTICO PARA EL 500!
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        if (response.ok) {
-            const data = await response.json();
-            console.log('✅ Video added successfully:', data);
-            successAlert.classList.add('active');
-            
-            // Limpieza y redirección
-            form.reset();
-            tags.length = 0;
-            document.querySelectorAll('.tag').forEach(tag => tag.remove());
-            videoPreview.classList.remove('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
-        } else {
-            // Manejar errores de servidor
-            let errorMessage = 'Error al añadir el video. Inténtalo de nuevo.';
-            
-            // Intenta leer el cuerpo de la respuesta 
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.message || errorData || errorMessage;
-            } catch (jsonError) {
-                // Si la respuesta no es JSON, usa el estado.
-                errorMessage = `Error ${response.status}: ${response.statusText}`;
-            }
-            
-            throw new Error(errorMessage);
+        // Deshabilitar botón
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span>Añadiendo video...';
         }
-    } catch (error) {
-        console.error('❌ Error adding video:', error);
-        errorAlert.textContent = error.message || 'Ocurrió un error inesperado.';
-        errorAlert.classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    } finally {
-        // Restaurar botón
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Añadir Video';
-    }
-});
+
+        //Comprobar autenticación
+        if (!token) {
+            const authError = new Error('No hay sesión activa. Por favor, inicia sesión.');
+            console.error('Error de autenticación:', authError);
+            if (errorAlert) {
+                errorAlert.textContent = authError.message;
+                errorAlert.classList.add('active');
+            }
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Añadir Video';
+            }
+            return;
+        }
+
+        //  Construir formData 
+        const formData = {
+            titulo: document.getElementById('videoTitle').value.trim(),
+            descripcion: document.getElementById('videoDescription').value.trim(),
+            url: document.getElementById('videoUrl').value.trim(),
+            fuente: detectPlatform(document.getElementById('videoUrl').value.trim()),
+            miniaturaUrl: null,
+            visto: false,
+            // Enviar el nombre de la categoría 
+            categoria: document.getElementById('videoCategory').value,
+            etiquetas: tags,
+            // El backend debe ignorar esto y usar el ID del JWT, pero lo dejamos por si acaso
+            usuarioId: 1
+        };
+
+        try {
+            //Enviar solicitud con el token
+            const response = await fetch('http://localhost:9000/api/videos/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ Video added successfully:', data);
+                if (successAlert) successAlert.classList.add('active');
+
+                // Limpieza y redirección
+                form.reset();
+                tags.length = 0;
+                document.querySelectorAll('.tag').forEach(tag => tag.remove());
+                if (videoPreview) videoPreview.classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                // Manejar errores de servidor
+                let errorMessage = 'Error al añadir el video. Inténtalo de nuevo.';
+
+                // Intenta leer el cuerpo de la respuesta 
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.message || errorData || errorMessage;
+                } catch (jsonError) {
+                    // Si la respuesta no es JSON, usa el estado.
+                    errorMessage = `Error ${response.status}: ${response.statusText}`;
+                }
+
+                throw new Error(errorMessage);
+            }
+        } catch (error) {
+            console.error('❌ Error adding video:', error);
+            if (errorAlert) {
+                errorAlert.textContent = error.message || 'Ocurrió un error inesperado.';
+                errorAlert.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } finally {
+            // Restaurar botón
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Añadir Video';
+            }
+        }
+    });
+}

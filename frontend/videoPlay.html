@@ -45,35 +45,35 @@
         <!-- SECCION LATERAL -->
         <div class="sidebar">
             <!-- SECCIÓN DE NOTAS -->
-<div class="sidebar-card">
-    <h2 class="sidebar-title">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-        </svg>
-        Notas
-    </h2>
-    <textarea id="notesArea" class="notes-textarea" placeholder="Escribe tus notas aquí..."></textarea>
-    <button id="saveNotesBtn" class="btn-primary">Guardar Notas</button>
-</div>
+            <div class="sidebar-card">
+                <h2 class="sidebar-title">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Notas
+                </h2>
+                <textarea id="notesArea" class="notes-textarea" placeholder="Escribe tus notas aquí..."></textarea>
+                <button id="saveNotesBtn" class="btn-primary">Guardar Notas</button>
+            </div>
 
-<!-- Time Markers Section -->
-<div class="sidebar-card">
-    <h2 class="sidebar-title">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        Marcadores de Tiempo
-    </h2>
-    <div class="marker-input-group">
-        <input type="text" id="markerLabel" class="marker-input" placeholder="Etiqueta del marcador">
-        <button id="addMarkerBtn" class="btn-secondary">
-            Añadir Marcador
-        </button>
-    </div>
-    <div id="markersList" class="markers-list"></div>
-</div>
+            <!-- Marcas Tiempo  -->
+            <div class="sidebar-card">
+                <h2 class="sidebar-title">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Marcadores de Tiempo
+                </h2>
+                <div class="marker-input-group">
+                    <input type="text" id="markerLabel" class="marker-input" placeholder="Etiqueta del marcador">
+                    <button id="addMarkerBtn" class="btn-secondary">
+                        Añadir Marcador
+                    </button>
+                </div>
+                <div id="markersList" class="markers-list"></div>
+            </div>
 
             <!-- Share Section -->
             <div class="sidebar-card">
@@ -123,7 +123,8 @@
         </div>
     </div>
 
-    <script src="/js/videoPlay.js"></script>
+    <script src="js/profilePictureLoader.js"></script>
+    <script src="js/videoPlay.js"></script>
 </body>
 
 </html>

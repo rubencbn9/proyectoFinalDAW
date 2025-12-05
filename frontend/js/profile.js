@@ -1,4 +1,8 @@
 const API_URL = 'http://localhost:9000/api';
+const UPLOAD_URL = 'http://localhost:9000/uploads';
+
+// Variable to store current user ID for profile picture operations
+let currentUserId = null;
 
 // Verificar autenticación
 function checkAuth() {
@@ -18,6 +22,75 @@ function getAuthHeaders() {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
+}
+
+// Obtener headers de autenticación sin Content-Type (para multipart/form-data)
+function getAuthHeadersForUpload() {
+    const token = localStorage.getItem('token');
+    return {
+        'Authorization': `Bearer ${token}`
+    };
+}
+
+// ============ PROFILE PICTURE HELPER FUNCTIONS ============
+
+// Display profile picture from filename
+function displayProfilePicture(filename) {
+    const profilePic = document.getElementById('profilePicture');
+    if (!profilePic) return;
+
+    const imageUrl = `${UPLOAD_URL}/${filename}`;
+    profilePic.innerHTML = `<img src="${imageUrl}" alt="Foto de perfil" onerror="handleProfileImageError()">`;
+    profilePic.classList.add('has-image');
+}
+
+// Display default avatar with initial letter
+function displayDefaultAvatar(username) {
+    const profilePic = document.getElementById('profilePicture');
+    if (!profilePic) return;
+
+    const primeraLetra = (username || 'U').charAt(0).toUpperCase();
+    profilePic.innerHTML = primeraLetra;
+    profilePic.classList.remove('has-image');
+}
+
+// Update header profile button with image or initial
+function updateHeaderProfileButton(profilePicture, username) {
+    const headerProfileBtn = document.getElementById('headerProfileBtn');
+    if (!headerProfileBtn) return;
+
+    if (profilePicture) {
+        const imageUrl = `${UPLOAD_URL}/${profilePicture}`;
+        headerProfileBtn.innerHTML = `<img src="${imageUrl}" alt="Perfil">`;
+        headerProfileBtn.classList.add('has-image');
+    } else {
+        const primeraLetra = (username || 'U').charAt(0).toUpperCase();
+        headerProfileBtn.textContent = primeraLetra;
+        headerProfileBtn.classList.remove('has-image');
+    }
+}
+
+// Handle profile image load error - fallback to default avatar
+function handleProfileImageError() {
+    const username = document.getElementById('username')?.value || 'U';
+    displayDefaultAvatar(username);
+}
+
+// Set loading state on profile picture
+function setProfilePictureLoading(isLoading) {
+    const profilePic = document.getElementById('profilePicture');
+    const uploadBtn = document.getElementById('uploadPhotoBtn');
+    const deleteBtn = document.getElementById('deletePhotoBtn');
+
+    if (isLoading) {
+        profilePic?.classList.add('loading');
+        if (uploadBtn) uploadBtn.disabled = true;
+        if (deleteBtn) deleteBtn.disabled = true;
+    } else {
+        profilePic?.classList.remove('loading');
+        if (uploadBtn) uploadBtn.disabled = false;
+        if (deleteBtn) deleteBtn.disabled = false;
+    }
 }
 
 // Cargar datos del usuario al iniciar
@@ -47,6 +120,9 @@ async function loadUserData() {
         const usuario = await response.json();
         console.log('Usuario cargado:', usuario);
 
+        // Store user ID for profile picture operations
+        currentUserId = usuario.idUsuario;
+
         // Actualizar campos del formulario
         document.getElementById('username').value = usuario.username || 'No disponible';
         document.getElementById('email').value = usuario.email || 'No disponible';
@@ -61,15 +137,15 @@ async function loadUserData() {
             });
         }
 
-        // Actualizar foto de perfil con inicial
-        const primeraLetra = (usuario.username || 'U').charAt(0).toUpperCase();
-        document.getElementById('profilePicture').textContent = primeraLetra;
-
-        // Actualizar botón del header
-        const headerProfileBtn = document.getElementById('headerProfileBtn');
-        if (headerProfileBtn) {
-            headerProfileBtn.textContent = primeraLetra;
+        // Actualizar foto de perfil - mostrar imagen si existe, o inicial si no
+        if (usuario.profilePicture) {
+            displayProfilePicture(usuario.profilePicture);
+        } else {
+            displayDefaultAvatar(usuario.username);
         }
+
+        // Actualizar botón del header con foto o inicial
+        updateHeaderProfileButton(usuario.profilePicture, usuario.username);
 
         console.log('Datos del usuario cargados correctamente');
         showNotification('Perfil cargado correctamente', 'success');
@@ -88,35 +164,119 @@ async function loadUserData() {
     }
 }
 
-// Funcion de cargar foto
-function uploadPhoto() {
+// ============ PROFILE PICTURE UPLOAD/DELETE FUNCTIONS ============
+
+// Upload new profile picture
+async function uploadPhoto() {
+    if (!currentUserId) {
+        showNotification('Error: Usuario no identificado', 'error');
+        return;
+    }
+
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.onchange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const profilePic = document.getElementById('profilePicture');
-                profilePic.style.backgroundImage = `url(${event.target.result})`;
-                profilePic.style.backgroundSize = 'cover';
-                profilePic.style.backgroundPosition = 'center';
-                profilePic.textContent = '';
 
-                // Aquí podría enviar la imagen 
-            };
-            reader.readAsDataURL(file);
+    input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            showNotification('Por favor selecciona un archivo de imagen válido', 'error');
+            return;
+        }
+
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            showNotification('La imagen no puede superar los 5MB', 'error');
+            return;
+        }
+
+        // Show loading state
+        setProfilePictureLoading(true);
+
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch(`${API_URL}/usuarios/${currentUserId}/profile-picture`, {
+                method: 'POST',
+                headers: getAuthHeadersForUpload(),
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'Error al subir la imagen');
+            }
+
+            const updatedUser = await response.json();
+            console.log('Imagen subida correctamente:', updatedUser);
+
+            // Display the new profile picture
+            if (updatedUser.profilePicture) {
+                displayProfilePicture(updatedUser.profilePicture);
+                // Also update header button
+                updateHeaderProfileButton(updatedUser.profilePicture, updatedUser.username);
+            }
+
+            showNotification('✅ Foto de perfil actualizada correctamente', 'success');
+
+        } catch (error) {
+            console.error('Error al subir foto de perfil:', error);
+            showNotification(`Error al subir la foto: ${error.message}`, 'error');
+        } finally {
+            setProfilePictureLoading(false);
         }
     };
+
     input.click();
 }
 
-function removePhoto() {
-    const profilePic = document.getElementById('profilePicture');
-    const username = document.getElementById('username').value;
-    profilePic.style.backgroundImage = '';
-    profilePic.textContent = username ? username.charAt(0).toUpperCase() : 'U';
+// Remove current profile picture
+async function removePhoto() {
+    if (!currentUserId) {
+        showNotification('Error: Usuario no identificado', 'error');
+        return;
+    }
+
+    // Confirm deletion
+    if (!confirm('¿Estás seguro de que quieres eliminar tu foto de perfil?')) {
+        return;
+    }
+
+    // Show loading state
+    setProfilePictureLoading(true);
+
+    try {
+        const response = await fetch(`${API_URL}/usuarios/${currentUserId}/profile-picture`, {
+            method: 'DELETE',
+            headers: getAuthHeadersForUpload()
+        });
+
+        if (!response.ok && response.status !== 204) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Error al eliminar la imagen');
+        }
+
+        console.log('Foto de perfil eliminada correctamente');
+
+        // Display default avatar
+        const username = document.getElementById('username').value;
+        displayDefaultAvatar(username);
+        // Also update header button
+        updateHeaderProfileButton(null, username);
+
+        showNotification('✅ Foto de perfil eliminada correctamente', 'success');
+
+    } catch (error) {
+        console.error('Error al eliminar foto de perfil:', error);
+        showNotification(`Error al eliminar la foto: ${error.message}`, 'error');
+    } finally {
+        setProfilePictureLoading(false);
+    }
 }
 
 // Cambiar contraseña
@@ -255,20 +415,6 @@ function cancelChanges() {
     }
 }
 
-// Desactivar cuenta (la eliminaré mas adelante posiblemente)
-// function deactivateAccount() {
-//     if (confirm('¿Estás seguro de que quieres desactivar la cuenta? Podrás reactivarla de nuevo iniciando sesión.')) {
-//         // Aquí irá la lógica de desactivación
-//         let eliminacion = delete
-//         showNotification('Cuenta desactivada. Serás redirigido al login.', 'success');
-
-//         setTimeout(() => {
-//             localStorage.clear();
-//             window.location.href = '/registro.html';
-//         }, 2000);
-//     }
-// }
-
 // Eliminar cuenta
 async function deleteAccount() {
     const confirmation = prompt('Esta acción no se puede deshacer. Escribe "ELIMINAR" para confirmar:');
@@ -311,7 +457,7 @@ async function deleteAccount() {
     }
 }
 
-// Cerrar sesió
+// Cerrar sesión
 function handleLogout() {
     if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
         localStorage.clear();
