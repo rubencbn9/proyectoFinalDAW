@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - VideoVault</title>
+    <link rel="icon" href="imagenes/logo.ico">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">Video<span>Vault</span> <span class="admin-badge">ADMIN</span></a>
+            <div class="header-actions">
+                <button class="logout-btn" onclick="handleLogout()" aria-label="Cerrar sesión">Salir</button>
+                <div class="profile-btn" id="profile-inicial">A</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <nav class="admin-nav">
+                <button class="nav-item active" data-tab="dashboard">
+                    <span class="icon">📊</span> Dashboard
+                </button>
+                <button class="nav-item" data-tab="users">
+                    <span class="icon">👥</span> Usuarios
+                </button>
+                <button class="nav-item" data-tab="videos">
+                    <span class="icon">🎬</span> Videos
+                </button>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <h2>Panel de Control</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon users">👥</div>
+                        <div class="stat-info">
+                            <h3>Usuarios Totales</h3>
+                            <p id="total-users">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon videos">🎬</div>
+                        <div class="stat-info">
+                            <h3>Videos Totales</h3>
+                            <p id="total-videos">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>Gestión de Usuarios</h2>
+                    <button class="btn-primary" onclick="showCreateUserModal()">+ Nuevo Usuario</button>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Videos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Users will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Videos Tab -->
+            <div id="videos-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>Gestión de Videos</h2>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table" id="videos-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Plataforma</th>
+                                <th>Usuario</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Videos will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create User Modal -->
+    <div id="create-user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCreateUserModal()">&times;</span>
+            <h2>Crear Nuevo Usuario</h2>
+            <form id="create-user-form">
+                <div class="form-group">
+                    <label for="new-username">Nombre de usuario</label>
+                    <input type="text" id="new-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-email">Email</label>
+                    <input type="email" id="new-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">Contraseña</label>
+                    <input type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-role">Rol</label>
+                    <select id="new-role">
+                        <option value="USUARIO">Usuario</option>
+                        <option value="ADMINISTRADOR">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary full-width">Crear Usuario</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
