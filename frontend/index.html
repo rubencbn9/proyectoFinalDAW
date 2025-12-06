@@ -7,8 +7,6 @@
     <title>VideoVault - Discover Videos</title>
     <link rel="icon" href="imagenes/logo.ico">
     <link rel="stylesheet" href="css/style.css">
-
-
 </head>
 
 <body>
@@ -18,16 +16,13 @@
             <div class="search-container">
                 <input type="text" class="search-bar" placeholder="Busca tus vídeos YouTube, TikTok, Vimeo...">
             </div>
-            <div class="card" role="region" aria-label="Agregar video">
+            <div class="header-actions">
+                <button class="logout-btn" onclick="handleLogout()" aria-label="Cerrar sesión">Salir</button>
                 <a id="top-user" href="/profile.html">
-
                     <button class="profile-btn" id="profile-inicial" aria-label="Profile">R</button>
-                    <button class="logout-btn" onclick="handleLogout()" aria-label="Cerrar sesión">
-                        logout
-                    </button>
                 </a>
-
             </div>
+        </div>
     </header>
 
     <div class="main-container">
@@ -49,6 +44,10 @@
                 <div class="filter-option">
                     <input type="checkbox" id="dailymotion">
                     <label for="dailymotion">Dailymotion</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="twitch">
+                    <label for="twitch">Twitch</label>
                 </div>
             </div>
 
@@ -76,24 +75,8 @@
                 </div>
             </div>
 
-            <!-- <div class="filter-section">
-                <h3 class="filter-title">Duracion</h3>
-                <div class="filter-option">
-                    <input type="checkbox" id="short">
-                    <label for="short">Corta (< 5 min)</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="medium">
-                    <label for="medium">Media (5-20 min)</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="long">
-                    <label for="long">Larga (> 20 min)</label>
-                </div>
-            </div> -->
-
             <div class="filter-section">
-                <h3 class="filter-title">Data de subida</h3>
+                <h3 class="filter-title">Fecha de subida</h3>
                 <div class="filter-option">
                     <input type="checkbox" id="today">
                     <label for="today">Hoy</label>
@@ -113,9 +96,8 @@
             <div class="content-header">
                 <h1>Explora tus Videos <span id="usuario" class="nombreUsuario"></span>
                     <div class="separate">
-                        <a id="btnAdd" href="nuevoVideo.html">
-                            <button class="add-video">+ VIDEO</button>
-                        </a>
+                        <button id="btnAdd" class="add-video" onclick="location.href='nuevoVideo.html'">+ VIDEO</button>
+
                     </div>
                 </h1>
                 <p>Explora contenido de moda de multiples plataformas</p>
@@ -130,17 +112,21 @@
     <footer>
         <div class="footer-container">
             <div class="social-links">
-                <a href="#" class="social-link" aria-label="Facebook">f</a>
-                <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
-                <a href="#" class="social-link" aria-label="Instagram">📷</a>
-                <a href="#" class="social-link" aria-label="YouTube">▶</a>
-                <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+                <a href="#" class="social-link" aria-label="Facebook"><img class="icon" src="svg/facebook.svg"
+                        alt="Facebook"></a>
+                <a href="#" class="social-link" aria-label="Twitter"><img class="icon" src="svg/twitter-x.svg"
+                        alt="Twitter"></a>
+                <a href="#" class="social-link" aria-label="Instagram"><img class="icon" src="svg/instagram.svg"
+                        alt="Instagram"></a>
+                <a href="#" class="social-link" aria-label="YouTube"><img class="icon" src="svg/youtube.svg"
+                        alt="YouTube"></a>
+                <a href="#" class="social-link" aria-label="LinkedIn"><img class="icon" src="svg/linkedin.svg"
+                        alt="LinkedIn"></a>
             </div>
             <div class="footer-links">
-                <a href="#">Política de privacidad</a>
-                <a href="#">Terminos y Servicios</a>
-                <a href="#">Contacto</a>
-                <a href="#">Sobre nosotros</a>
+                <a href="terminos.html">Terminos y Servicios</a>
+                <a href="contacto.html">Contacto</a>
+                <a href="about.html">Sobre nosotros</a>
             </div>
         </div>
     </footer>

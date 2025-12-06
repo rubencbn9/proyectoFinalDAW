@@ -843,6 +843,10 @@ footer {
     color: #00d9ff;
 }
 
+.icon {
+    filter: brightness(0) invert(1);
+}
+
 .visto-badge {
     position: absolute;
     top: 10px;
@@ -926,6 +930,7 @@ footer {
 .btn-visto svg {
     flex-shrink: 0;
 }
+
 /* Profile button with image */
 .profile-btn.has-image {
     padding: 0;
@@ -937,4 +942,36 @@ footer {
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
+}
+
+/* Profile button larger size */
+.profile-btn {
+    width: 45px;
+    height: 45px;
+}
+
+/* Header actions layout */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Updated logout button - minimal modern style */
+.logout-btn {
+    padding: 8px 16px;
+    margin-right: 10px;
+    background: transparent;
+    border: 1px solid #ff4757;
+    border-radius: 20px;
+    color: #ff4757;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #ff4757;
+    color: white;
 }
