@@ -4,6 +4,8 @@ const submitBtn = document.getElementById('submitBtn');
 const successAlert = document.getElementById('successAlert');
 const errorAlert = document.getElementById('errorAlert');
 
+const API_URL = 'http://localhost:9000/api/contacto/enviar';
+
 if (form) {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -25,21 +27,34 @@ if (form) {
         };
 
         try {
-            // Simular envío (puedes conectar esto a tu backend)
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
 
-            // Mostrar éxito
-            successAlert.classList.add('active');
-            form.reset();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const data = await response.json();
 
-            // Redirigir después de 3 segundos
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 3000);
+            if (response.ok) {
+                // Mostrar éxito
+                successAlert.textContent = '✅ ' + data.mensaje;
+                successAlert.classList.add('active');
+                form.reset();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Redirigir después de 3 segundos
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+            } else {
+                throw new Error(data.mensaje || 'Error al enviar el mensaje');
+            }
 
         } catch (error) {
             console.error('Error al enviar:', error);
+            errorAlert.textContent = '❌ ' + (error.message || 'Hubo un error al enviar el mensaje. Inténtalo de nuevo.');
             errorAlert.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } finally {

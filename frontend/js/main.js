@@ -237,15 +237,7 @@ function renderVideoCard(video) {
                     ${video.fuente || 'Desconocida'}
                 </span>
 
-                <!-- Papelera: ABAJO DERECHA (dentro de la miniatura) -->
-                <button class="delete-video-btn" 
-                    onclick="event.preventDefault(); event.stopPropagation(); deleteVideo(${video.idVideo})" 
-                    title="Eliminar video"
-                    style="position: absolute; bottom: 10px; right: 10px; z-index: 15; background: rgba(255, 68, 68, 0.9); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s ease; backdrop-filter: blur(10px);"
-                    onmouseenter="this.style.background='rgba(255, 68, 68, 1)'; this.style.transform='scale(1.1) rotate(10deg)';"
-                    onmouseleave="this.style.background='rgba(255, 68, 68, 0.9)'; this.style.transform='scale(1) rotate(0deg)';">
-                    🗑️
-                </button>
+                
             </div>
         </a>
 
@@ -255,7 +247,16 @@ function renderVideoCard(video) {
             <div class="video-meta" style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
                 <span style="font-size: 12px; color: #888; background: #2a2a2a; padding: 4px 8px; border-radius: 4px;">🗓 ${fecha}</span>
                 ${video.categoria?.nombre ? `<span style="font-size: 12px; color: #888; background: #2a2a2a; padding: 4px 8px; border-radius: 4px;">📁 ${video.categoria.nombre}</span>` : ''}
-            </div>
+            <!-- Papelera: ABAJO DERECHA (dentro de la miniatura) -->
+                <button class="delete-video-btn" 
+                    onclick="event.preventDefault(); event.stopPropagation(); deleteVideo(${video.idVideo})" 
+                    title="Eliminar video"
+                    style="position: absolute; bottom: 65px; right: 10px; z-index: 15; background: rgba(255, 68, 68, 0.9); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s ease; backdrop-filter: blur(10px);"
+                    onmouseenter="this.style.background='rgba(255, 68, 68, 1)'; this.style.transform='scale(1.1) rotate(10deg)';"
+                    onmouseleave="this.style.background='rgba(255, 68, 68, 0.9)'; this.style.transform='scale(1) rotate(0deg)';">
+                    🗑️
+                </button>
+                </div>
             
             <button 
                 class="btn-visto ${video.visto ? 'visto' : 'no-visto'}" 
@@ -686,7 +687,7 @@ function handleLogout() {
 // ========================================
 
 // Obtener nombre de usuario
-const nombreUsuario = localStorage.getItem("nombre") || localStorage.getItem("username") || "Usuario";
+const nombreUsuario = localStorage.getItem("username") || "Usuario";
 document.getElementById("usuario").textContent = nombreUsuario;
 
 const profileBtn = document.querySelector(".profile-btn");

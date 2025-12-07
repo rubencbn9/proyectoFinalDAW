@@ -140,7 +140,7 @@ function renderVideosTable(videos) {
             <td>${video.usuarioNombre || 'Desconocido'}</td>
             <td>${new Date(video.fechaGuardado).toLocaleDateString()}</td>
             <td>
-                <button class="action-btn btn-delete" onclick="deleteVideo(${video.id})" title="Eliminar Video">🗑️</button>
+                <button class="action-btn btn-delete" onclick="deleteVideo(${video.idVideo})" title="Eliminar Video">🗑️</button>
             </td>
         `;
         tbody.appendChild(tr);

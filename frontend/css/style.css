@@ -227,6 +227,10 @@ header {
     margin-bottom: 0.5rem;
 }
 
+.content-header button {
+    margin-top: 1rem;
+}
+
 .content-header p {
     color: var(--text-secondary);
     font-size: 1rem;

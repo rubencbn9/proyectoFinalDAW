@@ -374,3 +374,8 @@ footer {
         text-align: center;
     }
 }
+
+
+.icon {
+    filter: brightness(0) invert(1);
+}

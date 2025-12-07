@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoVault - Discover Videos</title>
+    <title>VideoVault - Descubre Videos</title>
     <link rel="icon" href="imagenes/logo.ico">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -18,6 +18,10 @@
             </div>
             <div class="header-actions">
                 <button class="logout-btn" onclick="handleLogout()" aria-label="Cerrar sesión">Salir</button>
+                <a href="admin.html" class="admin-only" style="display: none;">
+                    <button class="logout-btn" style="background: var(--accent-primary); color: black;">Admin
+                        Panel</button>
+                </a>
                 <a id="top-user" href="/profile.html">
                     <button class="profile-btn" id="profile-inicial" aria-label="Profile">R</button>
                 </a>
@@ -92,7 +96,7 @@
             </div>
         </aside>
 
-        <main class="content">
+        <main class="content" style="padding-top: 10px;">
             <div class="content-header">
                 <h1>Explora tus Videos <span id="usuario" class="nombreUsuario"></span>
                     <div class="separate">
@@ -112,16 +116,16 @@
     <footer>
         <div class="footer-container">
             <div class="social-links">
-                <a href="#" class="social-link" aria-label="Facebook"><img class="icon" src="svg/facebook.svg"
-                        alt="Facebook"></a>
-                <a href="#" class="social-link" aria-label="Twitter"><img class="icon" src="svg/twitter-x.svg"
-                        alt="Twitter"></a>
-                <a href="#" class="social-link" aria-label="Instagram"><img class="icon" src="svg/instagram.svg"
-                        alt="Instagram"></a>
-                <a href="#" class="social-link" aria-label="YouTube"><img class="icon" src="svg/youtube.svg"
-                        alt="YouTube"></a>
-                <a href="#" class="social-link" aria-label="LinkedIn"><img class="icon" src="svg/linkedin.svg"
-                        alt="LinkedIn"></a>
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="social-link"
+                    aria-label="Facebook"><img class="icon" src="svg/facebook.svg" alt="Facebook"></a>
+                <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="social-link"
+                    aria-label="Twitter"><img class="icon" src="svg/twitter-x.svg" alt="Twitter"></a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link"
+                    aria-label="Instagram"><img class="icon" src="svg/instagram.svg" alt="Instagram"></a>
+                <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="social-link"
+                    aria-label="YouTube"><img class="icon" src="svg/youtube.svg" alt="YouTube"></a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-link"
+                    aria-label="LinkedIn"><img class="icon" src="svg/linkedin.svg" alt="LinkedIn"></a>
             </div>
             <div class="footer-links">
                 <a href="terminos.html">Terminos y Servicios</a>

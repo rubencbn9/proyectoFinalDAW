@@ -55,8 +55,12 @@ async function handleLogin(e) {
         localStorage.setItem('username', data.username);
         if (data.role) localStorage.setItem('role', data.role);
 
-        // Redirigir al index
-        window.location.href = '/index.html';
+        // Redirigir según el rol
+        if (data.role === 'ADMINISTRADOR') {
+            window.location.href = '/admin.html';
+        } else {
+            window.location.href = '/index.html';
+        }
 
     } catch (error) {
         showError(error.message);
@@ -113,7 +117,13 @@ async function handleRegister(e) {
 // Verificar si ya esta logueado
 window.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
     if (token) {
-        window.location.href = '/index.html';
+        if (role === 'ADMINISTRADOR') {
+            window.location.href = '/admin.html';
+        } else {
+            window.location.href = '/index.html';
+        }
     }
 });
