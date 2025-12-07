@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return match ? match[1] : null;
     }
 
-    // === OTRAS PLATAFORMAS (ACTUALIZADO: aspect-ratio en lugar de height fijo) ===
+    // === OTRAS PLATAFORMAS===
 
     function generateYouTubeEmbed(url) {
       const videoId = extractYouTubeId(url);

@@ -1,7 +1,7 @@
 const API_URL = 'http://localhost:9000/api';
 const UPLOAD_URL = 'http://localhost:9000/uploads';
 
-// Variable to store current user ID for profile picture operations
+// Variable para actualizaciones de la foto de perfil
 let currentUserId = null;
 
 // Verificar autenticación
@@ -34,7 +34,7 @@ function getAuthHeadersForUpload() {
 
 // ============ PROFILE PICTURE HELPER FUNCTIONS ============
 
-// Display profile picture from filename
+// Mostrar la foto de perfil desde el nombre de archivo
 function displayProfilePicture(filename) {
     const profilePic = document.getElementById('profilePicture');
     if (!profilePic) return;
@@ -44,7 +44,7 @@ function displayProfilePicture(filename) {
     profilePic.classList.add('has-image');
 }
 
-// Display default avatar with initial letter
+// Mostrar avatar por defecto con la inicial
 function displayDefaultAvatar(username) {
     const profilePic = document.getElementById('profilePicture');
     if (!profilePic) return;
@@ -54,7 +54,7 @@ function displayDefaultAvatar(username) {
     profilePic.classList.remove('has-image');
 }
 
-// Update header profile button with image or initial
+// Actualizar el botón del header con la foto o la inicial
 function updateHeaderProfileButton(profilePicture, username) {
     const headerProfileBtn = document.getElementById('headerProfileBtn');
     if (!headerProfileBtn) return;
@@ -70,13 +70,13 @@ function updateHeaderProfileButton(profilePicture, username) {
     }
 }
 
-// Handle profile image load error - fallback to default avatar
+// Manejar error de carga de la foto de perfil - rebotar al avatar por defecto
 function handleProfileImageError() {
     const username = document.getElementById('username')?.value || 'U';
     displayDefaultAvatar(username);
 }
 
-// Set loading state on profile picture
+// Establecer el estado de carga de la foto de perfil
 function setProfilePictureLoading(isLoading) {
     const profilePic = document.getElementById('profilePicture');
     const uploadBtn = document.getElementById('uploadPhotoBtn');
@@ -120,7 +120,7 @@ async function loadUserData() {
         const usuario = await response.json();
         console.log('Usuario cargado:', usuario);
 
-        // Store user ID for profile picture operations
+        // Almacenar ID del usuario para operaciones de foto de perfil
         currentUserId = usuario.idUsuario;
 
         // Actualizar campos del formulario
@@ -164,9 +164,9 @@ async function loadUserData() {
     }
 }
 
-// ============ PROFILE PICTURE UPLOAD/DELETE FUNCTIONS ============
+// ============ FUNCIONES DE SUBIDA/ELIMINACION DE LA FOTO DE PERFIL ============
 
-// Upload new profile picture
+// Subir nueva foto de perfil
 async function uploadPhoto() {
     if (!currentUserId) {
         showNotification('Error: Usuario no identificado', 'error');
@@ -181,20 +181,20 @@ async function uploadPhoto() {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Validate file type
+        // Validar tipo de archivo
         if (!file.type.startsWith('image/')) {
             showNotification('Por favor selecciona un archivo de imagen válido', 'error');
             return;
         }
 
-        // Validate file size (max 5MB)
+        // Validar tamaño de archivo (max 5MB)
         const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
             showNotification('La imagen no puede superar los 5MB', 'error');
             return;
         }
 
-        // Show loading state
+        // Mostrar estado de carga
         setProfilePictureLoading(true);
 
         try {
@@ -215,10 +215,10 @@ async function uploadPhoto() {
             const updatedUser = await response.json();
             console.log('Imagen subida correctamente:', updatedUser);
 
-            // Display the new profile picture
+            // Mostrar la nueva foto de perfil
             if (updatedUser.profilePicture) {
                 displayProfilePicture(updatedUser.profilePicture);
-                // Also update header button
+                // Actualizar el botón del header
                 updateHeaderProfileButton(updatedUser.profilePicture, updatedUser.username);
             }
 
@@ -235,19 +235,19 @@ async function uploadPhoto() {
     input.click();
 }
 
-// Remove current profile picture
+// Eliminar la foto de perfil actual
 async function removePhoto() {
     if (!currentUserId) {
         showNotification('Error: Usuario no identificado', 'error');
         return;
     }
 
-    // Confirm deletion
+    // Confirmar eliminación
     if (!confirm('¿Estás seguro de que quieres eliminar tu foto de perfil?')) {
         return;
     }
 
-    // Show loading state
+    // Mostrar estado de carga
     setProfilePictureLoading(true);
 
     try {
@@ -263,10 +263,10 @@ async function removePhoto() {
 
         console.log('Foto de perfil eliminada correctamente');
 
-        // Display default avatar
+        //  Mostrar avatar por defecto
         const username = document.getElementById('username').value;
         displayDefaultAvatar(username);
-        // Also update header button
+        // Actualizar el botón del header
         updateHeaderProfileButton(null, username);
 
         showNotification('✅ Foto de perfil eliminada correctamente', 'success');

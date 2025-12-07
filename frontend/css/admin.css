@@ -342,3 +342,12 @@ body {
 .full-width {
     width: 100%;
 }
+
+.linkAdmin {
+    text-decoration: none;
+    color: var(--admin-text);
+}
+
+.linkAdmin:hover {
+    color: var(--admin-accent);
+}

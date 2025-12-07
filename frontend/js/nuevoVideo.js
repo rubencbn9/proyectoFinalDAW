@@ -132,7 +132,7 @@ function detectPlatform(url) {
 }
 
 
-// Form submission
+// Envío del formulario
 const form = document.getElementById('addVideoForm');
 const submitBtn = document.getElementById('submitBtn');
 const successAlert = document.getElementById('successAlert');

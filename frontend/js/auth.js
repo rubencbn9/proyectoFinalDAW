@@ -1,6 +1,6 @@
 /**
  * Auth Utility Functions
- * Provides role-based access control helpers
+ * Proporciona helpers para el control de acceso basado en roles
  */
 
 const AUTH_KEYS = {
@@ -15,7 +15,7 @@ const ROLES = {
 };
 
 /**
- * Check if user is authenticated
+ * Comprueba si el usuario está autenticado
  * @returns {boolean}
  */
 function isAuthenticated() {
@@ -23,7 +23,7 @@ function isAuthenticated() {
 }
 
 /**
- * Get the current user's role
+ * Obtiene el rol del usuario actual
  * @returns {string|null}
  */
 function getRole() {
@@ -31,7 +31,7 @@ function getRole() {
 }
 
 /**
- * Check if current user is an admin
+ * Comprueba si el usuario actual es un administrador
  * @returns {boolean}
  */
 function isAdmin() {
@@ -39,7 +39,7 @@ function isAdmin() {
 }
 
 /**
- * Get the current user's username
+ * Obtiene el nombre de usuario actual
  * @returns {string|null}
  */
 function getUsername() {
@@ -47,7 +47,7 @@ function getUsername() {
 }
 
 /**
- * Get the auth token
+ * Obtiene el token de autenticación
  * @returns {string|null}
  */
 function getToken() {
@@ -55,8 +55,8 @@ function getToken() {
 }
 
 /**
- * Store auth data from login/register response
- * @param {Object} data - Response data with token, username, role
+ * Almacena los datos de autenticación desde la respuesta de login/registro
+ * @param {Object} data - Datos de respuesta con token, nombre de usuario, rol
  */
 function storeAuthData(data) {
     if (data.token) localStorage.setItem(AUTH_KEYS.TOKEN, data.token);
@@ -65,7 +65,7 @@ function storeAuthData(data) {
 }
 
 /**
- * Clear all auth data (logout)
+ * Elimina todos los datos de autenticación (logout)
  */
 function clearAuthData() {
     localStorage.removeItem(AUTH_KEYS.TOKEN);
@@ -74,7 +74,7 @@ function clearAuthData() {
 }
 
 /**
- * Handle logout
+ * Maneja el cierre de sesión
  */
 function handleLogout() {
     clearAuthData();
@@ -82,7 +82,7 @@ function handleLogout() {
 }
 
 /**
- * Check auth and redirect if not authenticated
+ * Comprueba si el usuario está autenticado y redirige si no lo está
  * @returns {boolean}
  */
 function checkAuth() {

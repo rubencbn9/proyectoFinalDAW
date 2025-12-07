@@ -135,9 +135,8 @@ function renderVideosTable(videos) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${video.idVideo}</td>
-            <td>${video.titulo}</td>
+            <td><a class="linkAdmin" href="${video.url}">${video.titulo}</a></td>
             <td>${video.fuente || 'Desconocida'}</td>
-            <td>${video.usuarioNombre || 'Desconocido'}</td>
             <td>${new Date(video.fechaGuardado).toLocaleDateString()}</td>
             <td>
                 <button class="action-btn btn-delete" onclick="deleteVideo(${video.idVideo})" title="Eliminar Video">🗑️</button>
@@ -147,7 +146,7 @@ function renderVideosTable(videos) {
     });
 }
 
-// --- Actions ---
+// --- Acciones ---
 
 async function handleCreateUser(e) {
     e.preventDefault();
@@ -230,7 +229,7 @@ async function deleteVideo(videoId) {
     }
 }
 
-// --- Modals ---
+// --- Modales ---
 
 function showCreateUserModal() {
     document.getElementById('create-user-modal').classList.add('active');
@@ -240,7 +239,7 @@ function closeCreateUserModal() {
     document.getElementById('create-user-modal').classList.remove('active');
 }
 
-// Close modal when clicking outside
+// Cerrar modal al hacer clic fuera
 window.onclick = function (event) {
     const modal = document.getElementById('create-user-modal');
     if (event.target == modal) {
