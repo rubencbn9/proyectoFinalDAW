@@ -30,9 +30,10 @@ function getAuthHeaders() {
   };
 }
 
-// ========================================
+//------------------------------------------------------
 // SISTEMA DE VIDEOS VISTOS
-// ========================================
+//------------------------------------------------------
+
 
 // Toggle estado visto
 async function toggleVideoVisto(videoId, event) {
@@ -75,7 +76,7 @@ async function toggleVideoVisto(videoId, event) {
   }
 }
 
-// Actualizar UI del botón
+// Actualizar UI del boton
 function actualizarEstadoVistoUI(videoId, visto) {
   const btn = document.querySelector(`[data-video-id="${videoId}"]`);
   if (!btn) return;
@@ -155,9 +156,10 @@ function filtrarPorVisto(estado) {
   if (activeBtn) activeBtn.classList.add('active');
 }
 
-// ========================================
-// CARGAR Y RENDERIZAR VIDEOS
-// ========================================
+//------------------------------------------------------
+//  CARGAR Y RENDERIZAR VIDEOS
+//------------------------------------------------------
+
 
 // Cargar los videos desde el backend
 async function generateVideoCards() {
@@ -185,7 +187,10 @@ async function generateVideoCards() {
   }
 }
 
-// Renderizar videos
+//------------------------------------------------------
+// RENDERIZAR VIDEOS
+//------------------------------------------------------
+
 function renderVideos(videosToRender) {
   const videoGrid = document.getElementById("videoGrid");
   videoGrid.innerHTML = "";
@@ -208,7 +213,11 @@ function renderVideos(videosToRender) {
   updateResultsCount(videosToRender.length);
 }
 
+
+//------------------------------------------------------
 // Renderizar tarjeta individual de video
+//------------------------------------------------------
+
 function renderVideoCard(video) {
   const fecha = video.fechaGuardado
     ? new Date(video.fechaGuardado).toLocaleString()
@@ -274,9 +283,9 @@ function renderVideoCard(video) {
   return card;
 }
 
-// ========================================
+//------------------------------------------------------
 // SISTEMA DE FILTROS
-// ========================================
+//------------------------------------------------------
 
 // Aplicar filtros
 function applyFilters() {
@@ -344,7 +353,9 @@ function applyFilters() {
   renderVideos(filteredVideos);
 }
 
-// Actualizar contador de resultados
+//------------------------------------------------------
+// Actualizar CONTADOR DE RESULTADOS
+//------------------------------------------------------
 function updateResultsCount(count) {
   const contentHeader = document.querySelector(".content-header p");
   const activeFiltersCount =
@@ -360,7 +371,9 @@ function updateResultsCount(count) {
   }
 }
 
-// Configurar listeners de filtros
+//------------------------------------------------------
+// CONFIGURAR LISTENERS DE FILTROS
+//------------------------------------------------------
 const platformFilters = {
   youtube: "YouTube",
   tiktok: "TikTok",
@@ -436,9 +449,11 @@ searchBar.addEventListener("input", () => {
   applyFilters();
 });
 
-// ========================================
+
+//------------------------------------------------------
 // UI Y UTILIDADES
-// ========================================
+//------------------------------------------------------
+
 
 // Actualizar badge de filtros activos
 function updateFilterBadge() {
@@ -523,7 +538,10 @@ function addClearFiltersButton() {
   sidebar.appendChild(clearButton);
 }
 
-// Agregar filtros de visto
+
+//------------------------------------------------------
+// AGREGAR FILTROS DE VISTO
+//------------------------------------------------------
 function addVistoFilters() {
   const contentHeader = document.querySelector('.content-header');
   const filterDiv = document.createElement('div');
@@ -544,6 +562,7 @@ function addVistoFilters() {
 
   contentHeader.appendChild(filterDiv);
 
+
   // Estilos hover
   document.querySelectorAll('.filter-visto-btn').forEach(btn => {
     btn.addEventListener('mouseenter', () => {
@@ -561,7 +580,9 @@ function addVistoFilters() {
   });
 }
 
-// Sistema de notificaciones
+//------------------------------------------------------
+// SISTEMAS DE NOTIFICACIONES
+//------------------------------------------------------
 function showNotification(message, type = "success") {
   const notification = document.createElement("div");
   notification.textContent = message;
@@ -682,9 +703,12 @@ function handleLogout() {
   }
 }
 
-// ========================================
+
+
+//------------------------------------------------------
 // INICIALIZACIÓN
-// ========================================
+//------------------------------------------------------
+
 
 // Obtener nombre de usuario
 const nombreUsuario = localStorage.getItem("username") || "Usuario";

@@ -1,4 +1,3 @@
-// Contact form functionality
 const form = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 const successAlert = document.getElementById('successAlert');
@@ -14,7 +13,7 @@ if (form) {
         successAlert.classList.remove('active');
         errorAlert.classList.remove('active');
 
-        // Deshabilitar botón y mostrar spinner
+        // Deshabilitar boton y mostrar spinner de carga
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner"></span>Enviando...';
 
@@ -44,7 +43,7 @@ if (form) {
                 form.reset();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                // Redirigir después de 3 segundos
+                // Redirigir tras 3 segundos
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 3000);

@@ -1,4 +1,3 @@
-// Tags functionality - Solo si existen los elementos
 const tagInput = document.getElementById('tagInput');
 const tagsContainer = document.getElementById('tagsContainer');
 const tags = []; // Array para almacenar las etiquetas
@@ -64,6 +63,10 @@ if (videoUrlInput) {
         }
     });
 }
+
+//------------------------------------------------------
+// GESTION DE USUARIO
+//------------------------------------------------------
 
 // Obtener nombre del usuario guardado
 const nombreUsuario = localStorage.getItem('nombre')
@@ -131,6 +134,9 @@ function detectPlatform(url) {
     return null;
 }
 
+//------------------------------------------------------
+// AGREGAR VIDEO
+//------------------------------------------------------
 
 // Envío del formulario
 const form = document.getElementById('addVideoForm');
@@ -142,14 +148,14 @@ if (form) {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        //Obtener el token ANTES de cualquier envío
+        //Obtener el token ANTES de cualquier envio
         const token = localStorage.getItem('jwtToken') || localStorage.getItem('token');
 
         // Ocultar alertas previas
         if (successAlert) successAlert.classList.remove('active');
         if (errorAlert) errorAlert.classList.remove('active');
 
-        // Deshabilitar botón
+        // Deshabilitar boton
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner"></span>Añadiendo video...';
@@ -181,7 +187,7 @@ if (form) {
             // Enviar el nombre de la categoría 
             categoria: document.getElementById('videoCategory').value,
             etiquetas: tags,
-            // El backend debe ignorar esto y usar el ID del JWT, pero lo dejamos por si acaso
+            // El backend debe ignorar esto y usar el ID del JWT
             usuarioId: 1
         };
 
@@ -234,7 +240,7 @@ if (form) {
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } finally {
-            // Restaurar botón
+            // Restaurar boton
             if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Añadir Video';

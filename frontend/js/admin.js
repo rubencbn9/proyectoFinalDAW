@@ -1,19 +1,18 @@
 const API_URL = 'http://localhost:9000/api';
 
-// Check admin access immediately
+// comprobar acceso de admin inmediatamente
 document.addEventListener('DOMContentLoaded', () => {
     if (!checkAdminAccess()) return;
 
-    // Initialize dashboard
+    // iniciar dashboard
     loadDashboardStats();
     setupTabs();
     setupForms();
 
-    // Load initial data
+    // carga de datos inicial
     loadUsers();
     loadVideos();
 
-    // Setup profile button
     const profileBtn = document.getElementById('profile-inicial');
     if (profileBtn) {
         const username = getUsername();
@@ -27,11 +26,10 @@ function setupTabs() {
 
     navItems.forEach(item => {
         item.addEventListener('click', () => {
-            // Remove active class from all
+            
             navItems.forEach(nav => nav.classList.remove('active'));
             tabContents.forEach(tab => tab.classList.remove('active'));
 
-            // Add active class to clicked
             item.classList.add('active');
             const tabId = item.dataset.tab;
             document.getElementById(`${tabId}-tab`).classList.add('active');
@@ -46,7 +44,7 @@ function setupForms() {
     }
 }
 
-// --- API Calls ---
+// --- APIs ---
 
 async function loadDashboardStats() {
     try {
@@ -59,7 +57,7 @@ async function loadDashboardStats() {
         const stats = await response.json();
         console.log('Admin Stats Response:', stats); // Debugging
 
-        // Try multiple potential property names
+        
         const userCount = stats.totalUsuarios || 0;
         const videoCount = stats.totalVideos || 0;
 
@@ -102,7 +100,7 @@ async function loadVideos() {
     }
 }
 
-// --- Rendering ---
+// --- Renderizado ---
 
 function renderUsersTable(users) {
     const tbody = document.querySelector('#users-table tbody');
@@ -163,7 +161,7 @@ async function handleCreateUser(e) {
             body: JSON.stringify({ username, email, password, rol })
         });
 
-        if (!response.ok) throw new Error('Error creating user');
+        if (!response.ok) throw new Error('Error creando usuario');
 
         closeCreateUserModal();
         document.getElementById('create-user-form').reset();
@@ -194,7 +192,7 @@ async function deleteUser(userId) {
 }
 
 async function promoteUser(userId) {
-    if (!confirm('¿Estás seguro de promover a este usuario a Administrador?')) return;
+    if (!confirm('¿Estás seguro de hacer a este usuario a Administrador?')) return;
 
     try {
         const response = await fetch(`${API_URL}/admin/users/${userId}/change-role`, {
@@ -203,11 +201,11 @@ async function promoteUser(userId) {
             body: JSON.stringify({ rol: 'ADMINISTRADOR' })
         });
 
-        if (!response.ok) throw new Error('Error promoting user');
+        if (!response.ok) throw new Error('Error ascendiendo usuario');
 
         loadUsers();
     } catch (error) {
-        alert('Error al promover usuario: ' + error.message);
+        alert('Error al ascender usuario: ' + error.message);
     }
 }
 
@@ -220,7 +218,7 @@ async function deleteVideo(videoId) {
             headers: getAuthHeaders()
         });
 
-        if (!response.ok) throw new Error('Error deleting video');
+        if (!response.ok) throw new Error('Error eliminando video');
 
         loadVideos();
         loadDashboardStats();

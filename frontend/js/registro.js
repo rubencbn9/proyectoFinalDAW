@@ -74,7 +74,6 @@ async function handleRegister(e) {
     e.preventDefault();
     hideError();
 
-    // const nombre = document.getElementById('register-nombre').value;
     const username = document.getElementById('register-username').value;
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;

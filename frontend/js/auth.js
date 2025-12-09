@@ -1,6 +1,6 @@
 /**
- * Auth Utility Functions
- * Proporciona helpers para el control de acceso basado en roles
+ * funcion de autenticacion
+ * Proporciona ayuda para el control de acceso basado en roles
  */
 
 const AUTH_KEYS = {
@@ -15,7 +15,8 @@ const ROLES = {
 };
 
 /**
- * Comprueba si el usuario está autenticado
+ * Comprueba si el usuario esta autenticado
+ * anotaciones jsdoc: 
  * @returns {boolean}
  */
 function isAuthenticated() {
@@ -64,9 +65,9 @@ function storeAuthData(data) {
     if (data.role) localStorage.setItem(AUTH_KEYS.ROLE, data.role);
 }
 
-/**
- * Elimina todos los datos de autenticación (logout)
- */
+//------------------------------------------------------
+// Elimina todos los datos de autenticacion (logout)
+//------------------------------------------------------
 function clearAuthData() {
     localStorage.removeItem(AUTH_KEYS.TOKEN);
     localStorage.removeItem(AUTH_KEYS.USERNAME);
@@ -74,7 +75,7 @@ function clearAuthData() {
 }
 
 /**
- * Maneja el cierre de sesión
+ * Maneja el cierre de sesion
  */
 function handleLogout() {
     clearAuthData();
@@ -82,7 +83,7 @@ function handleLogout() {
 }
 
 /**
- * Comprueba si el usuario está autenticado y redirige si no lo está
+ * Comprueba si el usuario esta autenticado y redirige si no lo está
  * @returns {boolean}
  */
 function checkAuth() {
@@ -94,7 +95,7 @@ function checkAuth() {
 }
 
 /**
- * Check admin access and redirect if not admin
+ * comprueba el acceso admin y redirige si no es admin
  * @returns {boolean}
  */
 function checkAdminAccess() {
@@ -110,7 +111,7 @@ function checkAdminAccess() {
 }
 
 /**
- * Get auth headers for API requests
+ * obtiene headers para las peticiones api
  * @returns {Object}
  */
 function getAuthHeaders() {
@@ -121,7 +122,7 @@ function getAuthHeaders() {
 }
 
 /**
- * Handle API response errors including 403
+ * maneja las respuestas de errores de api 
  * @param {Response} response
  * @throws {Error}
  */
@@ -141,24 +142,24 @@ async function handleApiError(response) {
 }
 
 /**
- * Update UI elements based on role
+ * actualiza UI basado en el rol
  */
 function updateUIForRole() {
     const adminLinks = document.querySelectorAll('.admin-only');
     const userRoleElements = document.querySelectorAll('.user-role');
 
-    // Show/hide admin-only elements
+    // muestra esconde elementos solo para admin
     adminLinks.forEach(el => {
         el.style.display = isAdmin() ? '' : 'none';
     });
 
-    // Update role display elements
+    // actualiza elementos de muestra por rol
     userRoleElements.forEach(el => {
         el.textContent = getRole() || 'USUARIO';
     });
 }
 
-// Auto-update UI on page load
+
 document.addEventListener('DOMContentLoaded', () => {
     if (isAuthenticated()) {
         updateUIForRole();

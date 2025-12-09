@@ -1,4 +1,3 @@
-// Función de utilidad para cargar y mostrar la foto de perfil del usuario en el header
 
 async function loadHeaderProfilePicture() {
     const token = localStorage.getItem('token') || localStorage.getItem('jwtToken');
@@ -27,7 +26,7 @@ async function loadHeaderProfilePicture() {
     }
 }
 
-// Auto-cargar cuando el DOM esté listo
+// Autocargar cuando el DOM este listo
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadHeaderProfilePicture);
 } else {

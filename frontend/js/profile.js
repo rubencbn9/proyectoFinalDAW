@@ -32,7 +32,9 @@ function getAuthHeadersForUpload() {
     };
 }
 
-// ============ PROFILE PICTURE HELPER FUNCTIONS ============
+//------------------------------------------------------
+//FUNCIONES DE FOTO DE PERFIL
+//------------------------------------------------------
 
 // Mostrar la foto de perfil desde el nombre de archivo
 function displayProfilePicture(filename) {
@@ -163,8 +165,9 @@ async function loadUserData() {
         }
     }
 }
-
-// ============ FUNCIONES DE SUBIDA/ELIMINACION DE LA FOTO DE PERFIL ============
+//------------------------------------------------------
+// FUNCIONES DE SUBIDA/ELIMINACION DE LA FOTO DE PERFIL 
+//------------------------------------------------------
 
 // Subir nueva foto de perfil
 async function uploadPhoto() {
@@ -278,6 +281,10 @@ async function removePhoto() {
         setProfilePictureLoading(false);
     }
 }
+
+//------------------------------------------------------
+// FUNCIONES DE CAMBIO CONTRASEÑA
+//------------------------------------------------------
 
 // Cambiar contraseña
 async function changePassword() {
@@ -415,7 +422,10 @@ function cancelChanges() {
     }
 }
 
-// Eliminar cuenta
+
+//------------------------------------------------------
+// FUNCION PARA ELIMINAR CUENTA
+//------------------------------------------------------
 async function deleteAccount() {
     const confirmation = prompt('Esta acción no se puede deshacer. Escribe "ELIMINAR" para confirmar:');
 
@@ -520,7 +530,7 @@ function showNotification(message, type = 'success') {
 window.addEventListener('DOMContentLoaded', () => {
     loadUserData();
 
-    // Si existe el botón de logout en esta página, agregarlo
+    // Si existe el boton de logout en esta pagina, agregarlo
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', handleLogout);
